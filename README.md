@@ -1,3 +1,3 @@
 # SillyGeeseCS410
 
-All 410 project code.
+This is the SillyGeese' 410 project code for all phases.
