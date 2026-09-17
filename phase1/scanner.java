@@ -1,5 +1,5 @@
 package phase1;
 
-public class scanner {
+public class Scanner {
     
 }
