@@ -8,10 +8,10 @@ public class statetable {
         
     }
 
-    int [][] get_transition_table(void)
+    int [][] get_transition_table()
     {
         //transition table
-        int [][] transition_table = 
+        int [][] transition_table = {
         {0,1,-1,2,3,-1,-1,6,7,8,9,10,12,14,16,18,19,20,21,22},
         {1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -34,13 +34,14 @@ public class statetable {
         {19,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {20,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {21,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {22,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+        {22,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
+        };
 
 
         return transition_table;
     }   
 
-    boolean [] get_accepting_table(void)
+    boolean [] get_accepting_table()
     {
         boolean [] accepting_table = {
             false, 
@@ -62,7 +63,7 @@ public class statetable {
             false,
             true,
             true,
-            true
+            true,
             true,
             true,
             true};
@@ -72,7 +73,5 @@ public class statetable {
 
     
     
-
-
 }
 
