@@ -1,4 +1,4 @@
-package statetable.java;
+package phase1;
 
 public class statetable {
 
