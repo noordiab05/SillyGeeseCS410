@@ -1,17 +1,9 @@
 package phase1;
 
-public class statetable {
+public class StateTable {
 
-    public static void main (String[] args) {
-        System.out.println("");
-
-        
-    }
-
-    int [][] get_transition_table()
-    {
-        //transition table
-        int [][] transition_table = {
+    //transition table
+    private static int [][] transitionTable = {
         {0,1,-1,2,3,-1,-1,6,7,8,9,10,12,14,16,18,19,20,21,22},
         {1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -35,43 +27,42 @@ public class statetable {
         {20,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {21,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {22,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
-        };
+    };
 
+    private static boolean [] acceptingTable = {
+        false, 
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+    };
 
-        return transition_table;
+    public int [][] getTransitionTable()
+    {
+        return transitionTable;
     }   
 
-    boolean [] get_accepting_table()
+    public boolean [] getAcceptingTable()
     {
-        boolean [] accepting_table = {
-            false, 
-            true,
-            true,
-            true,
-            false,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            false,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true};
-
-            return accepting_table;
+        return acceptingTable;
     }
 
-    
-    
 }
-
