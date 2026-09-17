@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class StateTable {
 
     //transition table
-    private static int [][] transitionTable = {
+    private int [][] transitionTable = {
         {0,1,-1,2,3,-1,-1,6,7,8,9,10,12,14,16,18,19,20,21,22},
         {1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
@@ -34,7 +34,7 @@ public class StateTable {
         {22,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
     };
 
-    private static boolean [] acceptingTable = {
+    private boolean [] acceptingTable = {
         false, 
         true,
         true,
