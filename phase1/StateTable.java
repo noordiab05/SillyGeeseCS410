@@ -63,7 +63,7 @@ public class StateTable {
     // initialize the state-action table full of nulls
     private static List<Function<String, String>> stateActionTable = new ArrayList<>(Collections.nCopies(23, null));
     static {
-        // ending on state 1 calls valid function
+        // ending on state 1 calls the valid() function
         stateActionTable.set(1, s -> valid(s));
     }
 
@@ -82,9 +82,15 @@ public class StateTable {
         return stateActionTable;
     }
 
-    private static String valid(String keyword)
+    // determines if the token is a recognized keyword or a variable identifier
+    public static String valid(String token)
     {
-        if (keyword.equals("if")) return "if_kwd";
+        if (token.equals("for")) return "for_kwd";
+        if (token.equals("while")) return "while_kwd";
+        if (token.equals("if")) return "if_kwd";
+        if (token.equals("else")) return "else_kwd";
+        if (token.equals("int")) return "int_type";
+        if (token.equals("double")) return "double_type";
         return "var_id";
     }
 }
