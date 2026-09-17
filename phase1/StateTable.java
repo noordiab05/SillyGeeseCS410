@@ -1,5 +1,10 @@
 package phase1;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+
 public class StateTable {
 
     //transition table
@@ -55,6 +60,13 @@ public class StateTable {
         true
     };
 
+    // initialize the state-action table full of nulls
+    private static List<Function<String, String>> stateActionTable = new ArrayList<>(Collections.nCopies(23, null));
+    static {
+        // ending on state 1 calls valid function
+        stateActionTable.set(1, s -> valid(s));
+    }
+
     public int [][] getTransitionTable()
     {
         return transitionTable;
@@ -65,4 +77,14 @@ public class StateTable {
         return acceptingTable;
     }
 
+    public List<Function<String, String>> getStateActionTable()
+    {
+        return stateActionTable;
+    }
+
+    private static String valid(String keyword)
+    {
+        if (keyword.equals("if")) return "if_kwd";
+        return "var_id";
+    }
 }
