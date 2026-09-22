@@ -84,6 +84,11 @@ public class Scanner {
 
                 // empty the input token substring
                 input = "";
+                state = 0;
+            }
+            else if(c == ' ' || c == '\n'  || c == '\r')
+            {
+                continue;
             }
             else
             {
@@ -167,6 +172,7 @@ public class Scanner {
         {
             index = 17;
         }
+        
        
         return index;
     }

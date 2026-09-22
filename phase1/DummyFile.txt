@@ -1,30 +1,30 @@
-double weight = 2.3;
+double weight = 2.3 ;
 
-for (int i = 0 ; i < 10 ; i++)
+for ( int i = 0 ; i < 10 ; i ++ )
 {
-    weight = weight + 2.5;
+    weight = weight + 2.5 ;
 }
 
-while (i == 3)
+while ( i == 3 )
 {
-    weight = weight - 2.5;
+    weight = weight - 2.5 ;
 }
 
-if (i > 4)
+if ( i > 4 )
 {
-    weight = weight * 2.5;
-} else if (i < 4) 
+    weight = weight * 2.5 ;
+} else if ( i < 4 ) 
 {
-    weight = weight / 2.5;
-} else if (i >= 10)
+    weight = weight / 2.5 ;
+} else if ( i >= 10 )
 {
-    weight = weight * 2.5;
-} else if (i <= 10)
+    weight = weight * 2.5 ;
+} else if ( i <= 10 )
 {
-    weight = weight / 2.5;
-} else if (i != 10)
+    weight = weight / 2.5 ;
+} else if ( i != 10 )
 {
-    weight = weight - 2.5;
+    weight = weight - 2.5 ;
 }
 
 

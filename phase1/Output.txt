@@ -1,239 +1,115 @@
 double_type
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 3
-var_id 
-var_id 
-var_id 
-var_id 
+assign_op
+double_literal
+end_of_line
 for_kwd
-var_id 
+parenthesis_left
 int_type
 var_id i
-var_id 
-var_id 
-var_id 0
-var_id 
-var_id 
+assign_op
+int_literal
+end_of_line
 var_id i
-var_id 
-var_id 
-var_id 10
-var_id 
-var_id 
+less_than
+int_literal
+end_of_line
 var_id i
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+add_op
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+add_op
+double_literal
+end_of_line
+curly_brace_right
 while_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 
-var_id 3
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+equal
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+sub_op
+double_literal
+end_of_line
+curly_brace_right
 if_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 4
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+greater_than
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
+mult_op
+double_literal
+end_of_line
+curly_brace_right
 else_kwd
 if_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 4
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+less_than
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
+div_op
+double_literal
+end_of_line
+curly_brace_right
 else_kwd
 if_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 
-var_id 10
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+greater_or_equal
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
+mult_op
+double_literal
+end_of_line
+curly_brace_right
 else_kwd
 if_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 
-var_id 10
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+less_or_equal
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
+div_op
+double_literal
+end_of_line
+curly_brace_right
 else_kwd
 if_kwd
-var_id 
+parenthesis_left
 var_id i
-var_id 
-var_id 
-var_id 
-var_id 10
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+unequal
+int_literal
+parenthesis_right
+curly_brace_left
 var_id weight
-var_id 
-var_id 
+assign_op
 var_id weight
-var_id 
-var_id 
-var_id 2
-var_id 5
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
-var_id 
+sub_op
+double_literal
+end_of_line
+curly_brace_right
