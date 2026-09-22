@@ -28,44 +28,39 @@ public class Scanner {
                 int columnIndex = getColumn(state, c);
                 
                 
-                //a transition aka a space is indicated by column index 0!!
-                if(columnIndex != 0)
+                
+
+                if(transitionTable[state][columnIndex] != -1)
                 {
-
-                    if(transitionTable[state][columnIndex] != -1)
-                    {
-                        state = transitionTable[state][columnIndex];
-                        input += c;
-                    }
-                    else if(acceptingTable[state] == true)
-                    {
+                    state = transitionTable[state][columnIndex];
+                    input += c;
+                }
+                else if(acceptingTable[state] == true)
+                {
                         //output token
-                        try{
-                            Files.writeString(Path.of("Output.txt"), input);
-                            System.out.println("Successfully written.");
+                    try{
+                        Files.writeString(Path.of("Output.txt"), input);
+                        System.out.println("Successfully written.");
 
-                            input += c;
+                        input += c;
 
                             
-                        }
-                        catch(IOException e)
-                        {
-                            System.out.println("Couldn't write to file.");
-                        }
+                    }
+                    catch(IOException e)
+                    {
+                        System.out.println("Couldn't write to file.");
+                    }
                        
                         
                         
-                    }
-                    else
-                    {
-                        //reject/crash
-                    }
-
                 }
                 else
                 {
-                    input = "";
+                        //reject/crash
+                        input = "";
                 }
+
+               
                
 
 
@@ -158,11 +153,7 @@ public class Scanner {
         {
             index = 17;
         }
-        else if(c == ' ')
-        {
-            //this means a transition is occuring
-            index = 0;
-        }
+       
 
         
         return index;
