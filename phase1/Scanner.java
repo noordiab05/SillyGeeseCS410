@@ -64,11 +64,9 @@ public class Scanner {
                     stateName = getStateName(state);
                 }
 
-                if (stateName.equals("var_id")) {
+                if (stateName.equals("var_id") || stateName.contains("literal")) {
                     stateName += " " + input;
                 }
-
-                System.out.println(stateName + " || " + input);
 
                 stateName += "\n";
 
@@ -82,9 +80,12 @@ public class Scanner {
                     return;
                 }
 
-                // empty the input token substring
+                // empty the input token substring and reset to the start state
                 input = "";
                 state = 0;
+
+                // avoid skipping characters directly adjacent to accepted tokens
+                i--;
             }
             else if(c == ' ' || c == '\n'  || c == '\r')
             {
@@ -97,14 +98,16 @@ public class Scanner {
                 return;
             }
         }
+
+        System.out.println("Successfully wrote to output file '" + outputFile + "'");
     }
 
     private static int getColumn(char c)
     {
         int index = -1;
 
-        //checks a-zA-Z_, a-zA-z0-9
-        if((c>='a' && c<='z') || (c>='A' && c<='Z'))
+        //checks a-zA-Z_
+        if((c>='a' && c<='z') || (c>='A' && c<='Z') || c == '_')
         {
             index = 1;
         }

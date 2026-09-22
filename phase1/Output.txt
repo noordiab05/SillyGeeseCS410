@@ -1,56 +1,59 @@
 double_type
 var_id weight
 assign_op
-double_literal
+double_literal 2.3
 end_of_line
 for_kwd
 parenthesis_left
 int_type
 var_id i
 assign_op
-int_literal
+int_literal 0
 end_of_line
 var_id i
 less_than
-int_literal
+int_literal 10
 end_of_line
 var_id i
+assign_op
+var_id i
 add_op
+int_literal 1
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 add_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 while_kwd
 parenthesis_left
 var_id i
 equal
-int_literal
+int_literal 3
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 sub_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 if_kwd
 parenthesis_left
 var_id i
 greater_than
-int_literal
+int_literal 4
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 mult_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 else_kwd
@@ -58,14 +61,14 @@ if_kwd
 parenthesis_left
 var_id i
 less_than
-int_literal
+int_literal 4
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 div_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 else_kwd
@@ -73,14 +76,14 @@ if_kwd
 parenthesis_left
 var_id i
 greater_or_equal
-int_literal
+int_literal 10
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 mult_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 else_kwd
@@ -88,14 +91,14 @@ if_kwd
 parenthesis_left
 var_id i
 less_or_equal
-int_literal
+int_literal 10
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 div_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
 else_kwd
@@ -103,13 +106,13 @@ if_kwd
 parenthesis_left
 var_id i
 unequal
-int_literal
+int_literal 10
 parenthesis_right
 curly_brace_left
 var_id weight
 assign_op
 var_id weight
 sub_op
-double_literal
+double_literal 2.5
 end_of_line
 curly_brace_right
