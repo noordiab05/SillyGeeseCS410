@@ -1,7 +1,6 @@
 package phase1;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -60,9 +59,13 @@ public class StateTable {
         true
     };
 
-    // initialize the state-action table full of nulls
-    private static List<Function<String, String>> stateActionTable = new ArrayList<>(Collections.nCopies(23, null));
+    // initialize the state-action table full of nulls (23 to match 23 rows in the transition table)
+    private static List<Function<String, String>> stateActionTable = new ArrayList<>(23);
     static {
+        // fill state-action table with nulls initially
+        for (int i = 0; i < 23; i++) {
+            stateActionTable.add(null);
+        }
         // ending on state 1 calls the valid() function
         stateActionTable.set(1, s -> valid(s));
     }
