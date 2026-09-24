@@ -94,7 +94,7 @@ public class Scanner {
             else
             {
                 //reject/crash
-                System.out.println("Ended on a non-accepting state.");
+                System.out.println("Unexpected token: " + c);
                 return;
             }
         }
