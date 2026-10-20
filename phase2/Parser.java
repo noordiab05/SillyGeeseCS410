@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 */
 
-public class Scanner {
+public class Parser {
     public static void main(String[] args) {
         
     }
