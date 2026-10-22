@@ -3,6 +3,7 @@ package phase2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 /* 
 import java.io.IOException;
@@ -14,13 +15,16 @@ import java.util.function.Function;
 */
 
 public class Parser {
+    static Path inputFile = Path.of("phase1", "Output.txt");
+
+    static List<String> lines;
+    static int i = 0;
+
+    static String input;
+
     public static void main(String[] args) {
-        Path inputFile = Path.of("phase1", "Output.txt");
-
-        String fileContent;
-
         try {
-            fileContent = Files.readString(inputFile);
+            lines = Files.readAllLines(inputFile);
         }
         catch(IOException e)
         {
@@ -30,448 +34,448 @@ public class Parser {
     }
 
     // TODO: convert pseudocode to real code!!!
-    // void Parse()
-    // {
-    //     <add return character to end of file>
-    //     input = getInput()
-    //     Program() // The initial starting non-terminal
+    void Parse()
+    {
+        input = getInput();
+        Program();  // The initial starting non-terminal
         
-    //     if(input == some character that terminates the program)
-    //         accept();
-    //     else
-    //         reject();
-        
-    // }
+        if(i >= lines.size()) {
+            accept();
+        }
+        else {
+            reject();
+        }
+    }
 
-    // void accept()
-    // {
-    // print("Accept");
-    // }
+    void accept()
+    {
+        System.out.println("Accept");
+    }
 
-    // void reject()
-    // {
-    // print("Reject");
-    // exit();
+    void reject()
+    {
+        System.out.println("Reject");
+        System.exit(0);  // terminate
+    }
 
-    // }
+    String getInput()
+    {
+        String input = lines.get(i);
+        i++;
+        return input;
+    }
 
-    // void Program()
-    // {
+    void Program()
+    {
+        Statement();
 
-    // Statement()
+        if(input.equals("end_of_line"))
+        {
+            input = getInput();
+            if(!input.equals("terminate char"))
+            {
+                Program();
+            }
+        }
+    }
 
-    // if(inp = ';')
-    // {
-    //     inp = getInput()
-    //     if(inp != 'N')
-    //     {
-    //         Program();
-    //     }
-    // }
-    // }
+    void Statement()
+    {
+        if(input.equals("int_type"))
+        {
+            input = getInput();
+            if(input.startsWith("var_id"))
+            {
+                input = getInput();
+                if(input.equals("assign_op"))
+                {
+                    input = getInput();
+                    Value();
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else 
+            {
+                reject();
+            }
+        }
+        else if(input.equals("double_type"))
+        {
+            input = getInput();
+            if(input.startsWith("var_id"))
+            {
+                input = getInput();
+                if(input.equals("assign_op"))
+                {
+                    input = getInput();
+                    Value();
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else 
+            {
+                reject();
+            }
 
-    // Void Statement()
-    // {
-    // if(inp == int_type)
-    // {
-    //     inp = getInput()
-    //     if(inp == var_id)
-    //     {
-    //         inp = getInput()
-    //         if(inp == assign_op)
-    //         {
-    //             inp = getInput()
-    //             Value()
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else 
-    //     {
-    //         reject()
-    //     }
-    // }
-    // else if(inp == double_type)
-    // {
-    // inp = getInput()
-    //     if(inp == var_id)
-    //     {
-    //         inp = getInput()
-    //         if(inp == assign_op)
-    //         {
-    //             inp = getInput()
-    //             Value()
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else 
-    //     {
-    //         reject()
-    //     }
+        }
+        else if(input.equals("for_kwd"))
+        {
+            input = getInput();
+            
+            if(input.equals("parenthesis_left"))
+            {
+                input = getInput();
+                Assignment();
 
-    // }
-    // else if(inp == for_kwd)
-    // {
-    //     inp = getInput()
-        
-    //     if(inp == parenthesis_left)
-    //     {
-    //         inp = getInput()
-    //         Assignment()
-    //         if(inp == end_of_line)
-    //         {
-    //             inp = getInput()
-    //             Comparison()
-                    
-    //             if(inp == end_of_line)
-    //             {
-    //                 inp = getInput()
-    //                 Assignment()
+                if(input.equals("end_of_line"))
+                {
+                    input = getInput();
+                    Comparison();
                         
-    //                 if(inp == parenthesis_right)
-    //                 {
-    //                     inp = getInput()
-    //                     if(inp = curly_brace_left)
-    //                     {
-    //                         inp = getInput()
-    //                         Program()
-                                
-    //                         if(inp = curly_brace_right)
-    //                         {
-    //                             inp = getInput()
-    //                         }
-    //                         else
-    //                         {
-    //                             reject()
-    //                         }
-    //                     }
-    //                     else
-    //                     {
-    //                         reject()
-    //                     }
-    //                 }
-    //                 else
-    //                 {
-    //                     reject()
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 reject()
-    //             }
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-            
-    //     else
-    //     {
-    //         reject()
-    //     }
-    // }
-    // else if(inp == while_kwd)
-    // {
-    //     inp = getInput()
-    //     if(inp == parenthesis_left)
-    //     {
-    //         inp = getInput()
-    //         Comparison()
-    //         if(inp == parenthesis_right)
-    //         {
-    //             inp = getInput()
-    //             if(inp == curly_brace_left)
-    //             {
-    //                 inp = getInput()
-    //                 Program()
-                    
-    //                 if(inp == curly_brace_right)
-    //                 {
-    //                     inp = getInput()
-    //                 }
-    //                 else
-    //                 {
-    //                     reject()
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 reject()
-    //             }
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
-    // }
-    // else if(inp == if_kwd)
-    // {
-    //     inp = getInput()
-    //     if(inp == parenthesis_left)
-    //     {	
-    //         inp = getInput()
-    //         Comparison()
-    //         if(inp == parenthesis_right)
-    //         {
-    //             inp = getInput()
-    //             if(inp == curly_brace_left)
-    //             {
-    //                 inp = getInput()
-    //                 Program()
-    //                 if(inp == curly_brace_right)
-    //                 {
-    //                     inp = getInput()
-    //                 }
-    //                 else
-    //                 {
-    //                     reject()
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 reject()
-    //             }
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
-    // }
-    // else if(inp == else_kwd)
-    // {
-    //     if(inp == curly_brace_left)
-    //     {
-    //         inp = getInput()
-    //         Program()
-    //         if(inp == curly_brace_right)
-    //         {
-    //             inp = getInput()
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
-    // }
-    // else
-    // {
-    //     reject()
-    // }
+                    if(input.equals("end_of_line"))
+                    {
+                        input = getInput();
+                        Assignment();
+                            
+                        if(input.equals("parenthesis_right"))
+                        {
+                            input = getInput();
+                            if(input.equals("curly_brace_left"))
+                            {
+                                input = getInput();
+                                Program();
+                                    
+                                if(input.equals("curly_brace_right"))
+                                {
+                                    input = getInput();
+                                }
+                                else
+                                {
+                                    reject();
+                                }
+                            }
+                            else
+                            {
+                                reject();
+                            }
+                        }
+                        else
+                        {
+                            reject();
+                        }
+                    }
+                    else
+                    {
+                        reject();
+                    }
+                }
+                else
+                {
+                    reject();
+                }
+            }  
+            else
+            {
+                reject();
+            }
+        }
+        else if(input.equals("while_kwd"))
+        {
+            input = getInput();
+            if(input.equals("parenthesis_left"))
+            {
+                input = getInput();
+                Comparison();
+                if(input.equals("parenthesis_right"))
+                {
+                    input = getInput();
+                    if(input.equals("curly_brace_left"))
+                    {
+                        input = getInput();
+                        Program();
+                        
+                        if(input.equals("curly_brace_right"))
+                        {
+                            input = getInput();
+                        }
+                        else
+                        {
+                            reject();
+                        }
+                    }
+                    else
+                    {
+                        reject();
+                    }
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else if(input.equals("if_kwd"))
+        {
+            input = getInput();
+            if(input.equals("parenthesis_left"))
+            {	
+                input = getInput();
+                Comparison();
+                if(input.equals("parenthesis_right"))
+                {
+                    input = getInput();
+                    if(input.equals("curly_brace_left"))
+                    {
+                        input = getInput();
+                        Program();
+                        if(input.equals("curly_brace_right"))
+                        {
+                            input = getInput();
+                        }
+                        else
+                        {
+                            reject();
+                        }
+                    }
+                    else
+                    {
+                        reject();
+                    }
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else if(input.equals("else_kwd"))
+        {
+            if(input.equals("curly_brace_left"))
+            {
+                input = getInput();
+                Program();
+                if(input.equals("curly_brace_right"))
+                {
+                    input = getInput();
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else
+        {
+            reject();
+        }
+    }
 
-    // }
+    void Assignment()
+    {
+        if(input.equals("int_type"))
+        {
+            input = getInput();
+            if(input.startsWith("var_id"))
+            {
+                input = getInput();
+                if(input.equals("assign_op"))
+                {
+                    input = getInput();
+                    Value();
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else if(input.equals("double_type"))
+        {
+            input = getInput();
+            if(input.startsWith("var_id"))
+            {
+                input = getInput();
+                if(input.equals("assign_op"))
+                {
+                    input = getInput();
+                    Value();
+                }
+                else
+                {
+                    reject();
+                }
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else if(input.startsWith("var_id"))
+        {
+            input = getInput();
+            if(input.equals("assign_op"))
+            {
+                input = getInput();
+                Value();
+            }
+            else
+            {
+                reject();
+            }
+        }
+        else
+        {
+            reject();
+        }
 
-    // Assignment()
-    // {
-    //     if(inp == int_type)
-    //     {
-    //         inp = getInput()
-    //         if(inp == var_id)
-    //         {
-    //             inp = getInput()
-    //             if(inp == assign_op)
-    //             {
-    //                 inp = getInput()
-    //                 Value()
-    //             }
-    //             else
-    //             {
-    //                 reject()
-    //             }
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else if(inp == double_type)
-    //     {
-    //         inp = getInput()
-    //         if(inp == var_id)
-    //         {
-    //             inp = getInput()
-    //             if(inp == assign_op)
-    //             {
-    //                 inp = getInput()
-    //                 Value()
-    //             }
-    //             else
-    //             {
-    //                 reject()
-    //             }
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else if(inp == var_id)
-    //     {
-    //         inp = getInput()
-    //         if(inp == assign_op)
-    //         {
-    //             inp = getInput()
-    //             Value()
-    //         }
-    //         else
-    //         {
-    //             reject()
-    //         }
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
+    }
 
-    // }
+    void Value()
+    {
+        if(input.startsWith("int_literal"))
+        {
+            input = getInput();
+        }
+        else if(input.startsWith("double_literal"))
+        {
+            input = getInput();
+        }
+        else
+        {
+            Expression();
+        }
+    }
 
-    // Value()
-    // {
-    //     if(inp = int_literal)
-    //     {
-    //         inp = getInput()
-    //     }
-    //     else if(inp == double_literal)
-    //     {
-    //         inp = getInput()
-    //     }
-    //     else
-    //     {
-    //         Expression()
-    //     }
-    // }
+    void Expression()
+    {
+        if(input.startsWith("var_id"))
+        {
+            if(input.equals("add_op"))
+            {
+                input = getInput();
+                Term();
+            }
+            else if(input.equals("sub_op"))
+            {
+                input = getInput();
+                Term();
+            }
+            else
+            {
+                reject();
+            }
+        }
 
-    // Expression()
-    // {
-    // if(inp == var_id)
-    // {
-    //     if(inp == add_op)
-    //     {
-    //         inp = getInput()
-    //         Term()
-    //     }
-    //     else if(inp == sub_op)
-    //     {
-    //         inp = getInput()
-    //         Term()
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
-    // }
+        else
+        {
+            Term();
+        }
+    }
 
-    // else
-    // {
-    // Term()
-    // }
-    // }
+    void Term()
+    {
+        if(input.startsWith("var_id"))
+        {
+            input = getInput();
+            if(input.equals("mult_op"))
+            {
+                input = getInput();
+                Term();
+            }
+            else if(input.equals("div_op"))
+            {
+                input = getInput();
+                Term();
+            }
+            //otherwise, we just have a var_id
+        }
+        else if(input.startsWith("int_literal"))
+        {
+            input = getInput();
+        }
+        else if(input.startsWith("double_literal"))
+        {
+            input = getInput();
+        }
+        else
+        {
+            reject();
+        }
 
-    // Term()
-    // {
-    //     if(inp == var_id)
-    //     {
-    //         inp = getInput();
-    //         if(inp == mult_op)
-    //         {
-    //             inp = getInput()
-    //             Term()
-    //         }
-    //         else if(inp == div_op)
-    //         {
-    //             inp = getInput()
-    //             Term()
-    //         }
-    //         //otherwise, we just have a var_id
-    //     }
-    //     else if(inp == int_literal)
-    //     {
-    //         inp = getInput();
-            
-    //     }
-    //     else if(inp == double_literal)
-    //     {
-    //         inp = getInput();
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
+    }
 
-    // }
+    void Comparison()
+    {
+        if(input.startsWith("var_id"))
+        {
+            input = getInput();
+            ComparisonOp();
+            if(input.startsWith("int_literal"))
+            {
+                input = getInput();
+            }
+            else if(input.startsWith("double_literal"))
+            {
+                input = getInput();
+            }
+            else
+            {
+                reject();
+            }
+        }
+    }
 
-    // Comparison()
-    // {
-    // if(inp = var_id)
-    // {
-    //     inp = getInput()
-    //     ComparisonOp()
-    //     if(inp == int_literal)
-    //     {
-    //         inp = getInput()
-    //     }
-    //     else if(inp == double_literal)
-    //     {
-    //         inp = getInput()
-    //     }
-    //     else
-    //     {
-    //         reject()
-    //     }
-
-    // }
-
-    // }
-
-    // ComparisonOp()
-    // {
-    // if(inp == <)
-    // {
-    //     inp = getInput()
-    // }
-    // else if(inp == <=)
-    // {
-    // inp = getInput()
-    // }
-    // else if( inp == >)
-    // {
-    // inp = getInput()
-    // }
-    // else if(inp == >=)
-    // {
-    // inp = getInput()
-    // }
-    // else if(inp == ==)
-    // {
-    // inp = getInput()
-    // }
-    // else if(inp == !=)
-    // {
-    //     inp = getInput()
-    // }
-    // else 
-    // {
-    //     reject()
-    // }
-
-    // }
-
+    void ComparisonOp()
+    {
+        if(input.equals("less_than"))
+        {
+            input = getInput();
+        }
+        else if(input.equals("less_or_equal"))
+        {
+            input = getInput();
+        }
+        else if( input.equals("greater_than"))
+        {
+            input = getInput();
+        }
+        else if(input.equals("greater_or_equal"))
+        {
+            input = getInput();
+        }
+        else if(input.equals("equal"))
+        {
+            input = getInput();
+        }
+        else if(input.equals("unequal"))
+        {
+            input = getInput();
+        }
+        else 
+        {
+            reject();
+        }
+    }
 }
