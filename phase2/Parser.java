@@ -31,10 +31,12 @@ public class Parser {
             System.out.println("Couldn't read input file: " + e);
             return;
         }
+
+        Parse();
     }
 
     // TODO: convert pseudocode to real code!!!
-    void Parse()
+    static void Parse()
     {
         input = getInput();
         Program();  // The initial starting non-terminal
@@ -47,18 +49,18 @@ public class Parser {
         }
     }
 
-    void accept()
+    static void accept()
     {
         System.out.println("Accept");
     }
 
-    void reject()
+    static void reject()
     {
         System.out.println("Reject");
         System.exit(0);  // terminate
     }
 
-    String getInput()
+    static String getInput()
     {
         String input = lines.get(i);
         i++;
@@ -66,7 +68,7 @@ public class Parser {
         return input;
     }
 
-    void Program()
+    static void Program()
     {
         Statement();
 
@@ -83,7 +85,7 @@ public class Parser {
         }
     }
 
-    void Statement()
+    static void Statement()
     {
         if(input.equals("int_type"))
         {
@@ -292,7 +294,7 @@ public class Parser {
         }
     }
 
-    void Assignment()
+    static void Assignment()
     {
         if(input.equals("int_type"))
         {
@@ -356,7 +358,7 @@ public class Parser {
 
     }
 
-    void Value()
+    static void Value()
     {
         if(input.startsWith("int_literal"))
         {
@@ -372,10 +374,11 @@ public class Parser {
         }
     }
 
-    void Expression()
+    static void Expression()
     {
         if(input.startsWith("var_id"))
         {
+            input = getInput();
             if(input.equals("add_op"))
             {
                 input = getInput();
@@ -398,7 +401,7 @@ public class Parser {
         }
     }
 
-    void Term()
+    static void Term()
     {
         if(input.startsWith("var_id"))
         {
@@ -430,7 +433,7 @@ public class Parser {
 
     }
 
-    void Comparison()
+    static void Comparison()
     {
         if(input.startsWith("var_id"))
         {
@@ -451,7 +454,7 @@ public class Parser {
         }
     }
 
-    void ComparisonOp()
+    static void ComparisonOp()
     {
         if(input.equals("less_than"))
         {
