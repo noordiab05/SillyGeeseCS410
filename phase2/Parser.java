@@ -333,7 +333,8 @@ public class Parser {
 
     static void Expression()
     {
-        if(input.startsWith("var_id"))
+        // TODO: make it possible to reach Term from here :(
+        if(input.startsWith("var_id") && !(lines.get(i+1).equals("mult_op") || lines.get(i+1).equals("div_op")))
         {
             input = getInput();
             if(input.equals("add_op"))
@@ -373,7 +374,9 @@ public class Parser {
                 input = getInput();
                 Term();
             }
-            //otherwise, we just have a var_id
+            else {  //otherwise, we just have a var_id
+                input = getInput();
+            }
         }
         else if(input.startsWith("int_literal"))
         {
