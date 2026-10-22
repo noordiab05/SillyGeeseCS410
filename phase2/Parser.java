@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 public class Parser {
     public static void main(String[] args) {
-        Path inputFile = Path.of("phase1", "DummyFile.txt");
+        Path inputFile = Path.of("phase1", "Output.txt");
 
         String fileContent;
 
