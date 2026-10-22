@@ -334,7 +334,7 @@ public class Parser {
     static void Expression()
     {
         // TODO: make it possible to reach Term from here :(
-        if(input.startsWith("var_id") && !(lines.get(i+1).equals("mult_op") || lines.get(i+1).equals("div_op")))
+        if(input.startsWith("var_id") && !(lines.get(i+1).equals("mult_op") || lines.get(i+1).equals("div_op") || lines.get(i+1).equals("end_of_line")))
         {
             input = getInput();
             if(input.equals("add_op"))
