@@ -28,6 +28,7 @@ add_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 while_kwd
 parenthesis_left
 var_id i
@@ -42,6 +43,7 @@ sub_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 if_kwd
 parenthesis_left
 var_id i
@@ -56,6 +58,7 @@ mult_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 else_kwd
 if_kwd
 parenthesis_left
@@ -71,6 +74,7 @@ div_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 else_kwd
 if_kwd
 parenthesis_left
@@ -86,6 +90,7 @@ mult_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 else_kwd
 if_kwd
 parenthesis_left
@@ -101,6 +106,7 @@ div_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
 else_kwd
 if_kwd
 parenthesis_left
@@ -116,3 +122,4 @@ sub_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line

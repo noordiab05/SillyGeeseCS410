@@ -15,7 +15,7 @@ import java.util.function.Function;
 */
 
 public class Parser {
-    static Path inputFile = Path.of("phase2", "Phase1Output.txt");
+    static Path inputFile = Path.of("phase1", "Output.txt");
 
     static List<String> lines;
     static int i = 0;
@@ -56,7 +56,7 @@ public class Parser {
 
     static void reject()
     {
-        System.out.println("Reject");
+        System.out.println("Rejected: " + input);
         System.exit(0);  // terminate
     }
 
