@@ -87,50 +87,7 @@ public class Parser {
 
     static void Statement()
     {
-        if(input.equals("int_type"))
-        {
-            input = getInput();
-            if(input.startsWith("var_id"))
-            {
-                input = getInput();
-                if(input.equals("assign_op"))
-                {
-                    input = getInput();
-                    Value();
-                }
-                else
-                {
-                    reject();
-                }
-            }
-            else 
-            {
-                reject();
-            }
-        }
-        else if(input.equals("double_type"))
-        {
-            input = getInput();
-            if(input.startsWith("var_id"))
-            {
-                input = getInput();
-                if(input.equals("assign_op"))
-                {
-                    input = getInput();
-                    Value();
-                }
-                else
-                {
-                    reject();
-                }
-            }
-            else 
-            {
-                reject();
-            }
-
-        }
-        else if(input.equals("for_kwd"))
+        if(input.equals("for_kwd"))
         {
             input = getInput();
             
@@ -290,7 +247,7 @@ public class Parser {
         }
         else
         {
-            reject();
+            Assignment();
         }
     }
 
