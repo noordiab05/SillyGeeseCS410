@@ -15,7 +15,7 @@ import java.util.function.Function;
 */
 
 public class Parser {
-    static Path inputFile = Path.of("phase1", "Output.txt");
+    static Path inputFile = Path.of("phase2", "Phase1Output.txt");
 
     static List<String> lines;
     static int i = 0;
@@ -62,6 +62,7 @@ public class Parser {
     {
         String input = lines.get(i);
         i++;
+        System.out.println(input + " " + i);
         return input;
     }
 
@@ -72,10 +73,13 @@ public class Parser {
         if(input.equals("end_of_line"))
         {
             input = getInput();
-            if(!input.equals("terminate char"))
+            if(i < lines.size())
             {
                 Program();
             }
+        }
+        else {
+            reject();
         }
     }
 
