@@ -62,7 +62,7 @@ public class Parser {
 
     static String getInput()
     {
-        String input = lines.get(i);
+        input = lines.get(i);
         i++;
         System.out.println(input + " " + i);
         return input;
@@ -74,13 +74,25 @@ public class Parser {
 
         if(input.equals("end_of_line"))
         {
+            //System.out.println("The input is #1 " + input);
             input = getInput();
+            //System.out.println("The input is #2  " + input);
+            //System.out.println("This PROGRAM is reached.");
             if(i < lines.size())
             {
+                System.out.println("This PROGRAM() is reached.");
+                if(input.equals("curly_brace_right"))
+                {
+                    input = getInput();
+                    System.out.println("Input #1 is: " + input);
+                    input = getInput();
+                    System.out.println("Input #2 is: " + input);
+                }
                 Program();
             }
         }
         else {
+            System.out.println("This REJECT is reached.");
             reject();
         }
     }
@@ -227,6 +239,7 @@ public class Parser {
         }
         else if(input.equals("else_kwd"))
         {
+            input = getInput();
             if(input.equals("curly_brace_left"))
             {
                 input = getInput();
@@ -334,9 +347,11 @@ public class Parser {
     static void Expression()
     {
         // TODO: make it possible to reach Term from here :(
-        if(input.startsWith("var_id") && !(lines.get(i+1).equals("mult_op") || lines.get(i+1).equals("div_op") || lines.get(i+1).equals("end_of_line")))
+        if(input.startsWith("var_id") && !lines.get(i).startsWith("mult_op") && !lines.get(i).startsWith("div_op")&& !lines.get(i).startsWith("end_of_line"))
         {
+            
             input = getInput();
+            
             if(input.equals("add_op"))
             {
                 input = getInput();
