@@ -45,6 +45,7 @@ public class Parser {
             accept();
         }
         else {
+            System.out.println("Rejected in parse");
             reject();
         }
     }
@@ -70,14 +71,20 @@ public class Parser {
 
     static void Program()
     {
+
         Statement();
+        
+        
 
         if(input.equals("end_of_line"))
         {
-            //System.out.println("The input is #1 " + input);
+            
+
+            
             input = getInput();
-            //System.out.println("The input is #2  " + input);
-            //System.out.println("This PROGRAM is reached.");
+
+            
+
             if(i < lines.size())
             {
                 System.out.println("This PROGRAM() is reached.");
@@ -85,10 +92,22 @@ public class Parser {
                 {
                     input = getInput();
                     System.out.println("Input #1 is: " + input);
-                    input = getInput();
-                    System.out.println("Input #2 is: " + input);
+                    
+                    if(i < lines.size())
+                    {
+                        input = getInput();
+                        System.out.println("Input #2 is: " + input);
+                    }
+
+                    
                 }
-                Program();
+                if(i<lines.size())
+                {
+                    
+                    Program();
+                }
+                
+                
             }
         }
         else {
@@ -125,15 +144,17 @@ public class Parser {
                             {
                                 input = getInput();
                                 Program();
+
+                                // //DO WE NEED THIS NOW????????
+                                // if(input.equals("curly_brace_right"))
+                                // {
+                                //     input = getInput();
+                                // }
+                                // else
+                                // {
                                     
-                                if(input.equals("curly_brace_right"))
-                                {
-                                    input = getInput();
-                                }
-                                else
-                                {
-                                    reject();
-                                }
+                                //     reject();
+                                // }
                             }
                             else
                             {
@@ -175,14 +196,14 @@ public class Parser {
                         input = getInput();
                         Program();
                         
-                        if(input.equals("curly_brace_right"))
-                        {
-                            input = getInput();
-                        }
-                        else
-                        {
-                            reject();
-                        }
+                        // if(input.equals("curly_brace_right"))
+                        // {
+                        //     input = getInput();
+                        // }
+                        // else
+                        // {
+                        //     reject();
+                        // }
                     }
                     else
                     {
@@ -213,14 +234,14 @@ public class Parser {
                     {
                         input = getInput();
                         Program();
-                        if(input.equals("curly_brace_right"))
-                        {
-                            input = getInput();
-                        }
-                        else
-                        {
-                            reject();
-                        }
+                        // if(input.equals("curly_brace_right"))
+                        // {
+                        //     input = getInput();
+                        // }
+                        // else
+                        // {
+                        //     reject();
+                        // }
                     }
                     else
                     {
@@ -244,13 +265,50 @@ public class Parser {
             {
                 input = getInput();
                 Program();
-                if(input.equals("curly_brace_right"))
-                {
+                // if(input.equals("curly_brace_right"))
+                // {
+                //     input = getInput();
+                // }
+                // else
+                // {
+                //     reject();
+                // }
+            }
+            else if(input.equals("if_kwd"))
+            {
+                input = getInput();
+                if(input.equals("parenthesis_left"))
+                {	
                     input = getInput();
-                }
-                else
-                {
-                    reject();
+                    Comparison();
+                    if(input.equals("parenthesis_right"))
+                    {
+                        input = getInput();
+                        if(input.equals("curly_brace_left"))
+                        {
+                            input = getInput();
+                            Program();
+                            
+                            // if(input.equals("curly_brace_right"))
+                            // {
+                                
+                            //     input = getInput();
+                            // }
+                            // else
+                            // {
+                            //     System.out.println("HELLOO");
+                            //     reject();
+                            // }
+                        }
+                        else
+                        {
+                            reject();
+                        }
+                    }
+                    else
+                    {
+                        reject();
+                    }
                 }
             }
             else
