@@ -5,15 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-/* 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.List;
-import java.util.function.Function;
-*/
-
 public class Parser {
     static Path inputFile = Path.of("phase1", "Output.txt");
 
@@ -57,7 +48,7 @@ public class Parser {
     static void reject()
     {
         System.out.println("Rejected: " + input);
-        System.exit(0);  // terminate
+        System.exit(0);  // Terminate
     }
 
     static String getInput()
@@ -78,7 +69,7 @@ public class Parser {
         if(input.equals("end_of_line"))
         {
             
-            //was crashing without this if statement
+            // Crashing without this if statement
             if(i<lines.size())
             {
                 input = getInput();
