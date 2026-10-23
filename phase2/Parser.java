@@ -3,10 +3,12 @@ package phase2;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class Parser {
     static Path inputFile = Path.of("phase1", "Output.txt");
+    static Path outputFile = Path.of("phase2", "Atoms.txt");
 
     static List<String> lines;
     static int i = 0;
@@ -21,6 +23,16 @@ public class Parser {
         {
             System.out.println("Couldn't read input file: " + e);
             return;
+        }
+
+        try {
+            // overwrite output file to make it empty
+            Files.writeString(outputFile, "");
+        }
+        catch(IOException e)
+        {
+            System.out.println("Couldn't write to output file.");
+            System.exit(0);
         }
 
         Parse();
@@ -363,11 +375,23 @@ public class Parser {
         }
         else if(input.startsWith("var_id"))
         {
+            String var_name = input.split(" ")[1];
+
             input = getInput();
             if(input.equals("assign_op"))
             {
                 input = getInput();
                 Value();
+                
+                //output atom
+                try {
+                    Files.writeString(outputFile, "(MOV," + "val" + ",," + var_name + ")\n", StandardOpenOption.APPEND);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Couldn't write to output file.");
+                    System.exit(0);
+                }
             }
             else
             {
@@ -402,18 +426,39 @@ public class Parser {
         // TODO: make it possible to reach Term from here :(
         if(input.startsWith("var_id") && !lines.get(i).startsWith("mult_op") && !lines.get(i).startsWith("div_op")&& !lines.get(i).startsWith("end_of_line"))
         {
-            
+            String var_name = input.split(" ")[1];
+
             input = getInput();
             
             if(input.equals("add_op"))
             {
                 input = getInput();
                 Term();
+
+                //output atom
+                try {
+                    Files.writeString(outputFile, "(ADD," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Couldn't write to output file.");
+                    return;
+                }
             }
             else if(input.equals("sub_op"))
             {
                 input = getInput();
                 Term();
+
+                //output atom
+                try {
+                    Files.writeString(outputFile, "(SUB," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Couldn't write to output file.");
+                    return;
+                }
             }
             else
             {
@@ -431,16 +476,38 @@ public class Parser {
     {
         if(input.startsWith("var_id"))
         {
+            String var_name = input.split(" ")[1];
+
             input = getInput();
             if(input.equals("mult_op"))
             {
                 input = getInput();
                 Term();
+
+                //output atom
+                try {
+                    Files.writeString(outputFile, "(MUL," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Couldn't write to output file.");
+                    return;
+                }
             }
             else if(input.equals("div_op"))
             {
                 input = getInput();
                 Term();
+
+                //output atom
+                try {
+                    Files.writeString(outputFile, "(DIV," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Couldn't write to output file.");
+                    return;
+                }
             }
             else {  //otherwise, we just have a var_id
                 input = getInput();
@@ -448,11 +515,15 @@ public class Parser {
         }
         else if(input.startsWith("int_literal"))
         {
+            // int val = Integer.parseInt(input.split(" ")[1]);
             input = getInput();
+            // return val;
         }
         else if(input.startsWith("double_literal"))
         {
+            // double val = Double.parseDouble(input.split(" ")[1]);
             input = getInput();
+            // return val;
         }
         else
         {
