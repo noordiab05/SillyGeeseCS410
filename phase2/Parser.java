@@ -79,10 +79,11 @@ public class Parser {
         if(input.equals("end_of_line"))
         {
             
-
-            
-            input = getInput();
-
+            //was crashing without this if statement
+            if(i<lines.size())
+            {
+                input = getInput();
+            }
             
 
             if(i < lines.size())
@@ -97,6 +98,10 @@ public class Parser {
                     {
                         input = getInput();
                         System.out.println("Input #2 is: " + input);
+                    }
+                    else
+                    {
+                        return;
                     }
 
                     
