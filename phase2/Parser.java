@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
@@ -14,6 +15,10 @@ public class Parser {
     static int i = 0;
 
     static String input;
+
+    static List<String> atoms = new ArrayList<>();
+
+    static int temp_reg_num = 0;
 
     public static void main(String[] args) {
         try {
@@ -42,6 +47,14 @@ public class Parser {
     {
         input = getInput();
         Program();  // The initial starting non-terminal
+
+        try {
+            Files.write(outputFile, atoms, StandardOpenOption.APPEND);
+        }
+        catch (IOException e) {
+            System.out.println("Couldn't write to output file.");
+            System.exit(0);
+        }
         
         if(i >= lines.size()) {
             accept();
@@ -381,17 +394,9 @@ public class Parser {
             if(input.equals("assign_op"))
             {
                 input = getInput();
-                Value();
+                String val = Value();
                 
-                //output atom
-                try {
-                    Files.writeString(outputFile, "(MOV," + "val" + ",," + var_name + ")\n", StandardOpenOption.APPEND);
-                }
-                catch(IOException e)
-                {
-                    System.out.println("Couldn't write to output file.");
-                    System.exit(0);
-                }
+                atoms.add("(MOV," + val + ",," + var_name + ")");
             }
             else
             {
@@ -405,24 +410,32 @@ public class Parser {
 
     }
 
-    static void Value()
+    static String Value()
     {
+        String val;
         if(input.startsWith("int_literal"))
         {
+            val = input.split(" ")[1];
             input = getInput();
+            return val;
         }
         else if(input.startsWith("double_literal"))
         {
+            val = input.split(" ")[1];
             input = getInput();
+            return val;
         }
         else
         {
-            Expression();
+            val = Expression();
+            return val;  // temp_reg
         }
     }
 
-    static void Expression()
+    static String Expression()
     {
+        String val;
+
         // TODO: make it possible to reach Term from here :(
         if(input.startsWith("var_id") && !lines.get(i).startsWith("mult_op") && !lines.get(i).startsWith("div_op")&& !lines.get(i).startsWith("end_of_line"))
         {
@@ -433,32 +446,24 @@ public class Parser {
             if(input.equals("add_op"))
             {
                 input = getInput();
-                Term();
+                val = Term();
 
-                //output atom
-                try {
-                    Files.writeString(outputFile, "(ADD," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
-                }
-                catch(IOException e)
-                {
-                    System.out.println("Couldn't write to output file.");
-                    return;
-                }
+                String temp_reg = "$t" + temp_reg_num;
+                temp_reg_num++;
+
+                atoms.add("(ADD," + var_name + "," + val + "," + temp_reg + ")");
+                return temp_reg;
             }
             else if(input.equals("sub_op"))
             {
                 input = getInput();
-                Term();
+                val = Term();
+                
+                String temp_reg = "$t" + temp_reg_num;
+                temp_reg_num++;
 
-                //output atom
-                try {
-                    Files.writeString(outputFile, "(SUB," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
-                }
-                catch(IOException e)
-                {
-                    System.out.println("Couldn't write to output file.");
-                    return;
-                }
+                atoms.add("(SUB," + var_name + "," + val + "," + temp_reg + ")");
+                return temp_reg;
             }
             else
             {
@@ -468,12 +473,17 @@ public class Parser {
 
         else
         {
-            Term();
+            val = Term();
+            return val;
         }
+
+        return "ERROR";
     }
 
-    static void Term()
+    static String Term()
     {
+        String val;
+
         if(input.startsWith("var_id"))
         {
             String var_name = input.split(" ")[1];
@@ -482,78 +492,79 @@ public class Parser {
             if(input.equals("mult_op"))
             {
                 input = getInput();
-                Term();
+                val = Term();
+                
+                String temp_reg = "$t" + temp_reg_num;
+                temp_reg_num++;
 
-                //output atom
-                try {
-                    Files.writeString(outputFile, "(MUL," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
-                }
-                catch(IOException e)
-                {
-                    System.out.println("Couldn't write to output file.");
-                    return;
-                }
+                atoms.add("(MUL," + var_name + "," + val + "," + temp_reg + ")");
+                return temp_reg;
             }
             else if(input.equals("div_op"))
             {
                 input = getInput();
-                Term();
+                val = Term();
+                
+                String temp_reg = "$t" + temp_reg_num;
+                temp_reg_num++;
 
-                //output atom
-                try {
-                    Files.writeString(outputFile, "(DIV," + var_name + "," + "val" + "," + var_name + ")\n", StandardOpenOption.APPEND);
-                }
-                catch(IOException e)
-                {
-                    System.out.println("Couldn't write to output file.");
-                    return;
-                }
+                atoms.add("(DIV," + var_name + "," + val + "," + temp_reg + ")");
+                return temp_reg;
             }
             else {  //otherwise, we just have a var_id
                 input = getInput();
+                return var_name;
             }
         }
         else if(input.startsWith("int_literal"))
         {
-            // int val = Integer.parseInt(input.split(" ")[1]);
+            val = input.split(" ")[1];
             input = getInput();
-            // return val;
+            return val;
         }
         else if(input.startsWith("double_literal"))
         {
-            // double val = Double.parseDouble(input.split(" ")[1]);
+            val = input.split(" ")[1];
             input = getInput();
-            // return val;
+            return val;
         }
         else
         {
             reject();
         }
 
+        return "ERROR";
     }
 
-    static void Comparison()
+    static String Comparison()
     {
+        String val;
         if(input.startsWith("var_id"))
         {
             input = getInput();
             ComparisonOp();
             if(input.startsWith("int_literal"))
             {
+                val = input.split(" ")[1];
                 input = getInput();
+                return val;
             }
             else if(input.startsWith("double_literal"))
             {
+                val = input.split(" ")[1];
                 input = getInput();
+                return val;
             }
             else
             {
                 reject();
             }
         }
+
+        return "ERROR";
     }
 
-    static void ComparisonOp()
+    static String ComparisonOp()
     {
         if(input.equals("less_than"))
         {
@@ -583,5 +594,7 @@ public class Parser {
         {
             reject();
         }
+
+        return "ERROR";
     }
 }
