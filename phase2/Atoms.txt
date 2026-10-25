@@ -1,3 +1,5 @@
+(MOV,2.3,,weight)
+(MOV,0,,i)
 (ADD,i,1,$t0)
 (MOV,$t0,,i)
 (ADD,weight,2.5,$t1)

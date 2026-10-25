@@ -349,11 +349,15 @@ public class Parser {
             input = getInput();
             if(input.startsWith("var_id"))
             {
+                String var_name = input.split(" ")[1];
+
                 input = getInput();
                 if(input.equals("assign_op"))
                 {
                     input = getInput();
-                    Value();
+                    String val = Value();
+                    
+                    atoms.add("(MOV," + val + ",," + var_name + ")");
                 }
                 else
                 {
@@ -370,11 +374,15 @@ public class Parser {
             input = getInput();
             if(input.startsWith("var_id"))
             {
+                String var_name = input.split(" ")[1];
+
                 input = getInput();
                 if(input.equals("assign_op"))
                 {
                     input = getInput();
-                    Value();
+                    String val = Value();
+                    
+                    atoms.add("(MOV," + val + ",," + var_name + ")");
                 }
                 else
                 {
