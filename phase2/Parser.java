@@ -20,6 +20,11 @@ public class Parser {
 
     static int temp_reg_num = 0;
 
+    static int dest_num = 0;
+    static int exit_num = 0;
+
+    static int nested = 0;
+
     public static void main(String[] args) {
         try {
             lines = Files.readAllLines(inputFile);
@@ -48,6 +53,7 @@ public class Parser {
         input = getInput();
         Program();  // The initial starting non-terminal
 
+        // output atoms
         try {
             Files.write(outputFile, atoms, StandardOpenOption.APPEND);
         }
@@ -106,6 +112,10 @@ public class Parser {
                 System.out.println("This PROGRAM() is reached.");
                 if(input.equals("curly_brace_right"))
                 {
+                    if (nested > 0) {
+                        nested -= 2;
+                    }
+
                     input = getInput();
                     System.out.println("Input #1 is: " + input);
                     
@@ -163,6 +173,7 @@ public class Parser {
                             if(input.equals("curly_brace_left"))
                             {
                                 input = getInput();
+                                nested--;
                                 Program();
 
                                 // //DO WE NEED THIS NOW????????
@@ -214,8 +225,8 @@ public class Parser {
                     if(input.equals("curly_brace_left"))
                     {
                         input = getInput();
+                        nested--;
                         Program();
-                        
                         // if(input.equals("curly_brace_right"))
                         // {
                         //     input = getInput();
@@ -254,6 +265,8 @@ public class Parser {
                     {
                         input = getInput();
                         Program();
+
+                        nested--;
                         // if(input.equals("curly_brace_right"))
                         // {
                         //     input = getInput();
@@ -285,6 +298,8 @@ public class Parser {
             {
                 input = getInput();
                 Program();
+
+                nested--;
                 // if(input.equals("curly_brace_right"))
                 // {
                 //     input = getInput();
@@ -308,7 +323,8 @@ public class Parser {
                         {
                             input = getInput();
                             Program();
-                            
+
+                            nested--;
                             // if(input.equals("curly_brace_right"))
                             // {
                                 
@@ -329,6 +345,10 @@ public class Parser {
                     {
                         reject();
                     }
+                }
+                else
+                {
+                    reject();
                 }
             }
             else
@@ -357,7 +377,7 @@ public class Parser {
                     input = getInput();
                     String val = Value();
                     
-                    atoms.add("(MOV," + val + ",," + var_name + ")");
+                    atoms.add(atoms.size() - nested, "(MOV," + val + ",," + var_name + ")");
                 }
                 else
                 {
@@ -382,7 +402,7 @@ public class Parser {
                     input = getInput();
                     String val = Value();
                     
-                    atoms.add("(MOV," + val + ",," + var_name + ")");
+                    atoms.add(atoms.size() - nested, "(MOV," + val + ",," + var_name + ")");
                 }
                 else
                 {
@@ -404,7 +424,7 @@ public class Parser {
                 input = getInput();
                 String val = Value();
                 
-                atoms.add("(MOV," + val + ",," + var_name + ")");
+                atoms.add(atoms.size() - nested, "(MOV," + val + ",," + var_name + ")");
             }
             else
             {
@@ -459,7 +479,7 @@ public class Parser {
                 String temp_reg = "$t" + temp_reg_num;
                 temp_reg_num++;
 
-                atoms.add("(ADD," + var_name + "," + val + "," + temp_reg + ")");
+                atoms.add(atoms.size() - nested, "(ADD," + var_name + "," + val + "," + temp_reg + ")");
                 return temp_reg;
             }
             else if(input.equals("sub_op"))
@@ -470,7 +490,7 @@ public class Parser {
                 String temp_reg = "$t" + temp_reg_num;
                 temp_reg_num++;
 
-                atoms.add("(SUB," + var_name + "," + val + "," + temp_reg + ")");
+                atoms.add(atoms.size() - nested, "(SUB," + var_name + "," + val + "," + temp_reg + ")");
                 return temp_reg;
             }
             else
@@ -505,7 +525,7 @@ public class Parser {
                 String temp_reg = "$t" + temp_reg_num;
                 temp_reg_num++;
 
-                atoms.add("(MUL," + var_name + "," + val + "," + temp_reg + ")");
+                atoms.add(atoms.size() - nested, "(MUL," + var_name + "," + val + "," + temp_reg + ")");
                 return temp_reg;
             }
             else if(input.equals("div_op"))
@@ -516,7 +536,7 @@ public class Parser {
                 String temp_reg = "$t" + temp_reg_num;
                 temp_reg_num++;
 
-                atoms.add("(DIV," + var_name + "," + val + "," + temp_reg + ")");
+                atoms.add(atoms.size() - nested, "(DIV," + var_name + "," + val + "," + temp_reg + ")");
                 return temp_reg;
             }
             else {  //otherwise, we just have a var_id
@@ -544,32 +564,59 @@ public class Parser {
         return "ERROR";
     }
 
-    static String Comparison()
+    static void Comparison()
     {
         String val;
         if(input.startsWith("var_id"))
         {
+            String var_name = input.split(" ")[1];
             input = getInput();
-            ComparisonOp();
+            String comp_op = ComparisonOp();
             if(input.startsWith("int_literal"))
             {
                 val = input.split(" ")[1];
                 input = getInput();
-                return val;
+
+                String dest = "comp" + dest_num;
+                dest_num++;
+
+                String exit = "exit" + exit_num;
+                exit_num++;
+
+                atoms.add(atoms.size() - nested, "(TST," + var_name + "," + val + ",," + comp_op + "," + dest + ")");
+                atoms.add(atoms.size() - nested, "(JMP,,,,," + exit + ")");
+                atoms.add(atoms.size() - nested, "(LBL,,,,," + dest + ")");
+                atoms.add(atoms.size() - nested, "(LBL,,,,," + exit + ")");
+
+                nested += 3;
             }
             else if(input.startsWith("double_literal"))
             {
                 val = input.split(" ")[1];
                 input = getInput();
-                return val;
+
+                String dest = "comp" + dest_num;
+                dest_num++;
+
+                String exit = "exit" + exit_num;
+                exit_num++;
+
+                atoms.add(atoms.size() - nested, "(TST," + var_name + "," + val + ",," + comp_op + "," + dest + ")");
+                atoms.add(atoms.size() - nested, "(JMP,,,,," + exit + ")");
+                atoms.add(atoms.size() - nested, "(LBL,,,,," + dest + ")");
+                atoms.add(atoms.size() - nested, "(LBL,,,,," + exit + ")");
+
+                nested += 3;
             }
             else
             {
                 reject();
             }
         }
-
-        return "ERROR";
+        else
+        {
+            reject();
+        }
     }
 
     static String ComparisonOp()
@@ -577,26 +624,32 @@ public class Parser {
         if(input.equals("less_than"))
         {
             input = getInput();
+            return "5";
         }
         else if(input.equals("less_or_equal"))
         {
             input = getInput();
+            return "3";
         }
         else if( input.equals("greater_than"))
         {
             input = getInput();
+            return "4";
         }
         else if(input.equals("greater_or_equal"))
         {
             input = getInput();
+            return "2";
         }
         else if(input.equals("equal"))
         {
             input = getInput();
+            return "6";
         }
         else if(input.equals("unequal"))
         {
             input = getInput();
+            return "1";
         }
         else 
         {

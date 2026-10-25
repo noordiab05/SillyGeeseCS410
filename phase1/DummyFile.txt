@@ -19,10 +19,13 @@ if (i > 4)
 }; else if (i >= 10)
 {
     weight = weight * 2.5;
-}; else if (i <= 10)
+};
+if (i <= 10)
 {
     weight = weight / 2.5;
 }; else if (i != 10)
 {
     weight = weight - 2.5;
 };
+
+int valid = 1;

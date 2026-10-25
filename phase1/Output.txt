@@ -91,7 +91,6 @@ double_literal 2.5
 end_of_line
 curly_brace_right
 end_of_line
-else_kwd
 if_kwd
 parenthesis_left
 var_id i
@@ -122,4 +121,9 @@ sub_op
 double_literal 2.5
 end_of_line
 curly_brace_right
+end_of_line
+int_type
+var_id valid
+assign_op
+int_literal 1
 end_of_line
