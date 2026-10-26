@@ -97,29 +97,42 @@ public class Parser {
         {
             return;
         }
+
+        
         Statement();
         
-        // if(input.equals("curly_brace_right"))
-        // {
-        //     return;
-        // }
+        if(input.equals("curly_brace_right"))
+        {
+            return;
+        }
         
 
         if(input.equals("end_of_line"))
         {
-            
+            System.out.println("The input is " + input);
             // Crashing without this if statement
             if(i<lines.size())
             {
                 input = getInput();
+                System.out.println("The input is " + input);
+
             }
             System.out.println("Nested is reached, and the value is " + nested);
-            //nested = -1;
+            
             
 
             if(i<lines.size())
             {
-                Program();
+                if(input.equals("curly_brace_right"))
+                {
+                    System.out.println("Return inside Program to og caller.");
+                    return;
+                }
+                else
+                {
+                    Program();
+                }
+                
             }
         }
         else 
