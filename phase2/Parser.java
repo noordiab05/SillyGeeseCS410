@@ -175,6 +175,7 @@ public class Parser {
                                 // //DO WE NEED THIS NOW????????
                                 if(input.equals("curly_brace_right"))
                                 {
+                                    nested -= 2;
                                     input = getInput();
                                 }
                                 else
@@ -227,6 +228,7 @@ public class Parser {
                                 // //DO WE NEED THIS NOW????????
                         if(input.equals("curly_brace_right"))
                         {
+                            nested -= 2;
                             input = getInput();
                         }
                         else
@@ -271,6 +273,7 @@ public class Parser {
                         // //DO WE NEED THIS NOW????????
                         if(input.equals("curly_brace_right"))
                         {
+                            nested -= 2;
                             input = getInput();
                         }
                         else
@@ -307,6 +310,7 @@ public class Parser {
                 // //DO WE NEED THIS NOW????????
                 if(input.equals("curly_brace_right"))
                 {
+                    nested -= 2;
                     input = getInput();
                 }
                 else
@@ -335,7 +339,7 @@ public class Parser {
                             System.out.println("HELLOOOOOO");
                             if(input.equals("curly_brace_right"))
                             {
-                                
+                                nested -= 2;
                                 input = getInput();
                             }
                             else
