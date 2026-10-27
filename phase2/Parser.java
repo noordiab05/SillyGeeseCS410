@@ -67,7 +67,6 @@ public class Parser {
             accept();
         }
         else {
-            System.out.println("Rejected in parse");
             reject();
         }
     }
@@ -87,7 +86,6 @@ public class Parser {
     {
         input = lines.get(i);
         i++;
-        System.out.println(input + " " + i);
         return input;
     }
 
@@ -110,23 +108,16 @@ public class Parser {
 
         if(input.equals("end_of_line"))
         {
-            System.out.println("The input is " + input);
             // Crashing without this if statement
             if(i<lines.size())
             {
                 input = getInput();
-                System.out.println("The input is " + input);
-
             }
-            System.out.println("Nested is reached, and the value is " + nested);
-            
-            
 
             if(i<lines.size())
             {
                 if(input.equals("curly_brace_right"))
                 {
-                    System.out.println("Return inside Program to og caller.");
                     return;
                 }
                 else
@@ -138,7 +129,6 @@ public class Parser {
         }
         else 
         {
-            System.out.println("This REJECT is reached in PROGRAM!!");
             reject();
         }
     }
@@ -183,8 +173,6 @@ public class Parser {
                                     nested--;
                                 }
 
-                                System.out.println("WE GOT HERE YAY! FOR KWD IN STATEMENT");
-                                // //DO WE NEED THIS NOW????????
                                 if(input.equals("curly_brace_right"))
                                 {
                                     if (nested > 2) {
@@ -251,8 +239,7 @@ public class Parser {
                         if (nested > 0) {
                             nested--;
                         }
-                        System.out.println("WE GOT HERE YAY! WHILE KWD IN STATEMENT");
-                                // //DO WE NEED THIS NOW????????
+
                         if(input.equals("curly_brace_right"))
                         {
                             if (nested > 2) {
@@ -298,9 +285,7 @@ public class Parser {
                     {
                         input = getInput();
                         Program();
-                        System.out.println("WE GOT HERE YAY! IF_KWD IN STATEMENT");
                         
-                        // //DO WE NEED THIS NOW????????
                         if(input.equals("curly_brace_right"))
                         {
                             if (nested > 2) {
@@ -347,8 +332,6 @@ public class Parser {
                     nested = 0;
                 }
 
-                System.out.println("WE GOT HERE YAY! ELSE_KWD IN STATEMENT");
-                // //DO WE NEED THIS NOW????????
                 if(input.equals("curly_brace_right"))
                 {
                     if (nested > 2) {
@@ -477,7 +460,6 @@ public class Parser {
     {
         String val;
 
-        // TODO: make it possible to reach Term from here :(
         if(input.startsWith("var_id") && !lines.get(i).startsWith("mult_op") && !lines.get(i).startsWith("div_op")&& !lines.get(i).startsWith("end_of_line"))
         {
             String var_name = input.split(" ")[1];
