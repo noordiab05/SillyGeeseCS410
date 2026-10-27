@@ -169,13 +169,20 @@ public class Parser {
                             if(input.equals("curly_brace_left"))
                             {
                                 input = getInput();
-                                nested--;
                                 Program();
+                                if (nested > 0) {
+                                    nested--;
+                                }
                                 System.out.println("WE GOT HERE YAY! FOR KWD IN STATEMENT");
                                 // //DO WE NEED THIS NOW????????
                                 if(input.equals("curly_brace_right"))
                                 {
-                                    nested -= 2;
+                                    if (nested > 2) {
+                                        nested -= 3;
+                                    }
+                                    else {
+                                        nested = 0;
+                                    }
                                     input = getInput();
                                 }
                                 else
@@ -222,13 +229,20 @@ public class Parser {
                     if(input.equals("curly_brace_left"))
                     {
                         input = getInput();
-                        nested--;
                         Program();
+                        if (nested > 0) {
+                            nested--;
+                        }
                         System.out.println("WE GOT HERE YAY! WHILE KWD IN STATEMENT");
                                 // //DO WE NEED THIS NOW????????
                         if(input.equals("curly_brace_right"))
                         {
-                            nested -= 2;
+                            if (nested > 2) {
+                                nested -= 3;
+                            }
+                            else {
+                                nested = 0;
+                            }
                             input = getInput();
                         }
                         else
@@ -266,14 +280,17 @@ public class Parser {
                     {
                         input = getInput();
                         Program();
-
-                        nested--;
                         System.out.println("WE GOT HERE YAY! IF_KWD IN STATEMENT");
                         
                         // //DO WE NEED THIS NOW????????
                         if(input.equals("curly_brace_right"))
                         {
-                            nested -= 2;
+                            if (nested > 2) {
+                                nested -= 3;
+                            }
+                            else {
+                                nested = 0;
+                            }
                             input = getInput();
                         }
                         else
@@ -300,66 +317,32 @@ public class Parser {
         else if(input.equals("else_kwd"))
         {
             input = getInput();
+            nested++;
             if(input.equals("curly_brace_left"))
             {
                 input = getInput();
                 Program();
+                if (nested > 0) {
+                    nested--;
+                }
+                else {
+                    nested = 0;
+                }
 
-                nested--;
                 System.out.println("WE GOT HERE YAY! ELSE_KWD IN STATEMENT");
                 // //DO WE NEED THIS NOW????????
                 if(input.equals("curly_brace_right"))
                 {
-                    nested -= 2;
+                    if (nested > 2) {
+                        nested -= 3;
+                    }
+                    else {
+                        nested = 0;
+                    }
                     input = getInput();
                 }
                 else
-                {
-                                    
-                    reject();
-                }
-            }
-            else if(input.equals("if_kwd"))
-            {
-                input = getInput();
-                if(input.equals("parenthesis_left"))
-                {	
-                    input = getInput();
-                    Comparison();
-                    if(input.equals("parenthesis_right"))
-                    {
-                        input = getInput();
-                        if(input.equals("curly_brace_left"))
-                        {
-                            input = getInput();
-                            Program();
-
-                            nested--;
-                            System.out.println("THIS IS REACHED IN ELSE IF IN STATEMENT");
-                            System.out.println("HELLOOOOOO");
-                            if(input.equals("curly_brace_right"))
-                            {
-                                nested -= 2;
-                                input = getInput();
-                            }
-                            else
-                            {
-                                System.out.println("HELLOO");
-                                reject();
-                            }
-                        }
-                        else
-                        {
-                            reject();
-                        }
-                    }
-                    else
-                    {
-                        reject();
-                    }
-                }
-                else
-                {
+                {            
                     reject();
                 }
             }
