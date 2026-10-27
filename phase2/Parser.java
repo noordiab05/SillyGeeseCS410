@@ -20,6 +20,7 @@ public class Parser {
 
     static int temp_reg_num = 0;
 
+    static int loop_num = 0;
     static int dest_num = 0;
     static int exit_num = 0;
 
@@ -155,6 +156,11 @@ public class Parser {
 
                 if(input.equals("end_of_line"))
                 {
+                    String loop_label = "loop" + loop_num;
+                    loop_num++;
+
+                    atoms.add(atoms.size() - nested, "(LBL,,,,," + loop_label + ")");
+
                     input = getInput();
                     Comparison();
                         
@@ -170,9 +176,13 @@ public class Parser {
                             {
                                 input = getInput();
                                 Program();
+                                
+                                atoms.add(atoms.size() - nested, "(JMP,,,,," + loop_label + ")");
+
                                 if (nested > 0) {
                                     nested--;
                                 }
+
                                 System.out.println("WE GOT HERE YAY! FOR KWD IN STATEMENT");
                                 // //DO WE NEED THIS NOW????????
                                 if(input.equals("curly_brace_right"))
@@ -221,6 +231,11 @@ public class Parser {
             input = getInput();
             if(input.equals("parenthesis_left"))
             {
+                String loop_label = "loop" + loop_num;
+                loop_num++;
+
+                atoms.add(atoms.size() - nested, "(LBL,,,,," + loop_label + ")");
+
                 input = getInput();
                 Comparison();
                 if(input.equals("parenthesis_right"))
@@ -230,6 +245,9 @@ public class Parser {
                     {
                         input = getInput();
                         Program();
+                        
+                        atoms.add(atoms.size() - nested, "(JMP,,,,," + loop_label + ")");
+                        
                         if (nested > 0) {
                             nested--;
                         }
