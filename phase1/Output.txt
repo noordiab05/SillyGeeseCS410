@@ -60,6 +60,7 @@ end_of_line
 curly_brace_right
 end_of_line
 else_kwd
+curly_brace_left
 if_kwd
 parenthesis_left
 var_id i
@@ -76,6 +77,7 @@ end_of_line
 curly_brace_right
 end_of_line
 else_kwd
+curly_brace_left
 if_kwd
 parenthesis_left
 var_id i
@@ -88,6 +90,19 @@ assign_op
 var_id weight
 mult_op
 double_literal 2.5
+end_of_line
+curly_brace_right
+end_of_line
+else_kwd
+curly_brace_left
+var_id weight
+assign_op
+var_id weight
+add_op
+var_id i
+end_of_line
+curly_brace_right
+curly_brace_right
 end_of_line
 curly_brace_right
 end_of_line
@@ -107,6 +122,7 @@ end_of_line
 curly_brace_right
 end_of_line
 else_kwd
+curly_brace_left
 if_kwd
 parenthesis_left
 var_id i
@@ -119,6 +135,8 @@ assign_op
 var_id weight
 sub_op
 double_literal 2.5
+end_of_line
+curly_brace_right
 end_of_line
 curly_brace_right
 end_of_line
