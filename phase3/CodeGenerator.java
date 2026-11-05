@@ -31,5 +31,30 @@ public class CodeGenerator {
             System.exit(0);
         }
 
+        Generate();
+
+    }
+
+    static void Generate() {
+        for (var line : lines) {
+            String[] pieces = line.substring(1, line.length()).split(",");
+            String operation = pieces[0];
+            String left = pieces[1];
+            String right = pieces[2];
+            String result = pieces[3];
+            String comp = pieces[4];
+            String dest = pieces[5];
+
+            if (operation == "ADD") {
+                add();
+            }
+            // TODO: add more operations
+        }
+        return;
+    }
+
+    // TODO: finish this
+    static void add() {
+        return;
     }
 }
