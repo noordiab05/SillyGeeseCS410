@@ -3,6 +3,7 @@ package phase3;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 
 public class CodeGenerator {
@@ -10,6 +11,12 @@ public class CodeGenerator {
     static Path outputFile = Path.of("phase3", "Binary.txt");
 
     static List<String> lines;
+
+    static int pc = 0b000;
+    static HashMap<Integer, Integer> codeSegment = new HashMap<>();
+    static HashMap<String, Integer> dataSegment = new HashMap<>();
+
+
 
     public static void main(String[] args) {
         try {
@@ -45,34 +52,35 @@ public class CodeGenerator {
             String comp = pieces[4];
             String dest = pieces[5];
 
-            if(operation == "MOV")
+            if(operation.equals("MOV"))
             {
                 mov();
             }
-            else if(operation == "LBL")
+            else if(operation.equals("LBL"))
             {
                 lbl();
             }
-            else if(operation == "JMP")
+            else if(operation.equals("JMP"))
             {
                 jmp();
             }
-            else if (operation == "ADD") {
-                add();
+            else if (operation.equals("ADD"))
+            {
+                add(left, right, result);
             }
-            else if(operation == "SUB")
+            else if(operation.equals("SUB"))
             {
                 sub();
             }
-            else if(operation == "MUL")
+            else if(operation.equals("MUL"))
             {
                 mul();
             }
-            else if(operation == "DIV")
+            else if(operation.equals("DIV"))
             {
                 div();
             }
-            else if(operation == "TST")
+            else if(operation.equals("TST"))
             {
                 tst();
             }
@@ -82,7 +90,31 @@ public class CodeGenerator {
     }
 
     // TODO: finish this
-    static void add() {
+    static void add(String left, String right, String result) {
+        //ireg2 = 2
+        //freg2 = 10
+        String leftType = getType(left);
+        String rightType = getType(right);
+
+        String rx;
+        String ry;
+        String rt;
+
+        //idk
+        if(leftType.equals("Int"))
+        {
+            int leftInt= Integer.parseInt(left);
+            rx = Integer.toBinary(leftInt);
+        }
+        else if(leftType.equals("Double"))
+        {
+            float leftFloat = Float.parseFloat(left);
+            int leftInt = Float.floatToIntBits(leftFloat);
+            rx = Float.toBinary(leftInt);
+        }
+        
+        
+
         return;
     }
     static void sub()
@@ -115,4 +147,22 @@ public class CodeGenerator {
         return;
     }
     
+    static String getType(String num)
+    {
+        try{
+            Integer.parseInt(num);
+            return "Int";
+        }
+        catch(NumberFormatException e)
+        {
+        }
+
+        try{
+            Float.parseFloat(num);
+            return "Float";
+        } catch (NumberFormatException e) {
+        }
+
+        return "Variable";
+    }
 }
