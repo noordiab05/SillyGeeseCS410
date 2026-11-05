@@ -45,8 +45,36 @@ public class CodeGenerator {
             String comp = pieces[4];
             String dest = pieces[5];
 
-            if (operation == "ADD") {
+            if(operation == "MOV")
+            {
+                mov();
+            }
+            else if(operation == "LBL")
+            {
+                lbl();
+            }
+            else if(operation == "JMP")
+            {
+                jmp();
+            }
+            else if (operation == "ADD") {
                 add();
+            }
+            else if(operation == "SUB")
+            {
+                sub();
+            }
+            else if(operation == "MUL")
+            {
+                mul();
+            }
+            else if(operation == "DIV")
+            {
+                div();
+            }
+            else if(operation == "TST")
+            {
+                tst();
             }
             // TODO: add more operations
         }
@@ -57,4 +85,34 @@ public class CodeGenerator {
     static void add() {
         return;
     }
+    static void sub()
+    {
+        return;
+    }
+    static void mul()
+    {
+        return;
+    }
+    static void div()
+    {
+        return;
+    }
+    static void mov()
+    {
+        return;
+    }
+    static void lbl()
+    {
+        return;
+    }
+
+    static void tst()
+    {
+        return;
+    }
+    static void jmp()
+    {
+        return;
+    }
+    
 }
