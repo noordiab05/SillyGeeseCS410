@@ -54,14 +54,17 @@ public class CodeGenerator {
         for (var line : lines) {
             String[] pieces = line.substring(1, line.length()).split(",");
             String operation = pieces[0];
-            String left = pieces[1];
-            String right = pieces[2];
-            String result = pieces[3];
-            String comp = pieces[4];
-            String dest = pieces[5];
+
+            String place1 = "";
+            String place2 = "";
+            String place3 = "";
+            String place4 = "";
+            String place5 = "";
 
             if(operation.equals("MOV"))
             {
+                place1 = pieces[1];
+                place2 = pieces[3];
                 //skip MOV after an ADD/SUB/MULT/DIV
                 if(arithmetic_operation_identifier == 1)
                 {
@@ -76,34 +79,52 @@ public class CodeGenerator {
             }
             else if(operation.equals("LBL"))
             {
+                place1 = pieces[5];
                 lbl();
             }
             else if(operation.equals("JMP"))
             {
+                place1 = pieces[5];
                 jmp();
             }
             else if (operation.equals("ADD"))
             {
+                place1 = pieces[1];
+                place2 = pieces[2];
+                place3 = pieces[3];
                 arithmetic_operation_identifier = 1;
-                add(left, right, result);
+                add(place1, place2, place3);
             }
             else if(operation.equals("SUB"))
             {
+                place1 = pieces[1];
+                place2 = pieces[2];
+                place3 = pieces[3];
                 arithmetic_operation_identifier = 1;
-                sub(left, right, result);
+                sub(place1, place2, place3);
             }
             else if(operation.equals("MUL"))
             {
+                place1 = pieces[1];
+                place2 = pieces[2];
+                place3 = pieces[3];
                 arithmetic_operation_identifier = 1;
-                mul(left, right, result);
+                mul(place1, place2, place3);
             }
             else if(operation.equals("DIV"))
             {
+                place1 = pieces[1];
+                place2 = pieces[2];
+                place3 = pieces[3];
                 arithmetic_operation_identifier = 1;
-                div(left, right, result);
+                div(place1, place2, place3);
             }
             else if(operation.equals("TST"))
             {
+                place1 = pieces[1];
+                place2 = pieces[2];
+                place3 = pieces[4];
+                place4 = pieces[5];
                 tst();
             }
             
@@ -416,103 +437,7 @@ public class CodeGenerator {
     }
     static void div(String left, String right, String result)
     {
-       //get the address 
-        String leftAddress = getAddress(left);
-        String rightAddress = getAddress(right);
-        String resultAddress = getAddress(result);
-
-        if(leftAddress==null || rightAddress == null || resultAddress == null)
-        {
-            System.out.println("Issue with the addresses being null.\n");
-        }
-
-
-        Number [] leftElements = dataSegment.get(left);
-        Number [] rightElements = dataSegment.get(right);
-
-        //lw rt leftAddress
-        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
-        {
-            //lw ireg2 leftAddress
-            String instruction = "lw" + "2" + "00" + leftAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-            //lw frep2 leftAddress
-            String instruction = "lw" + "a" + "00"+ leftAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else
-        {
-            System.out.println("Failed to lw rt leftAddress [ADD].\n");
-        }
-
-    
-        //lw rt rightAddress
-        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
-        {
-            //lw ireg3 rightAddress
-            String instruction = "lw" + "3" + "00" + rightAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-            //lw frep3 rightAddress
-            String instruction = "lw" + "b" + "00"+ rightAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else
-        {
-            System.out.println("Failed to lw rt rightAddress [ADD].\n");
-        }
-
-
-
-        //add rt rx ry
-        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
-        {
-            //div ireg6 ireg2 ireg3
-            String instruction = "5"+"6"+"2"+"3"+"0000";
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-            //div fpreg6 fpreg2 frepg3
-            String instruction = "5" + "e" + "a" + "b" + "0000";
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else
-        {
-            System.out.println("Failed to add rt rx ry [ADD].\n");
-        }
-
-        //MIGHT NEED TO DO IN SW --> CORRESPONDS TO MOV
-        //sw rt address
-        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
-        {
-            //sw ireg6 resultAddress
-            String instruction = "e" + "6" + "00" + resultAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-            //sw frep6 resultAddress
-            String instruction = "e" + "e" + "00" + resultAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
-        else
-        {
-            System.out.println("Failed to sw rt address [ADD].\n");
-        }
+       
         return;
     }
 
