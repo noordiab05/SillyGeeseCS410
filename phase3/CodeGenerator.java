@@ -20,6 +20,8 @@ public class CodeGenerator {
     //Ex:          'a'     0b000  5
     static HashMap<String, Number[]> dataSegment = new HashMap<>();
 
+    static HashMap<String, Integer> labels = new HashMap<>();
+
     static int dataSegmentpc = 0b100;
 
     public static void main(String[] args) {
@@ -76,7 +78,7 @@ public class CodeGenerator {
             }
             else if(operation.equals("LBL"))
             {
-                lbl();
+                lbl(dest);
             }
             else if(operation.equals("JMP"))
             {
@@ -316,7 +318,7 @@ public class CodeGenerator {
 
     static void mul(String left, String right, String result)
     {
-         //get the address 
+        //get the address 
         String leftAddress = getAddress(left);
         String rightAddress = getAddress(right);
         String resultAddress = getAddress(result);
@@ -522,8 +524,15 @@ public class CodeGenerator {
         return;
     }
 
-    static void lbl()
+    static void lbl(String dest)
     {
+        // save this instruction's address for later
+        labels.put(dest, pc);
+
+        // nop (all 0's)
+        String instruction = "00000000";
+        codeSegment.put(pc, instruction);
+        pc = pc+4;
         return;
     }
 
