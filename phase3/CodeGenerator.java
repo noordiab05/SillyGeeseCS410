@@ -148,7 +148,6 @@ public class CodeGenerator {
             System.out.println("Issue with the addresses being null.\n");
         }
 
-
         Number [] leftElements = dataSegment.get(left);
         Number [] rightElements = dataSegment.get(right);
 
@@ -160,7 +159,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
             
             //lw frep2 leftAddress
             String instruction = "d" + "a" + "00"+ leftAddress;
@@ -169,7 +168,9 @@ public class CodeGenerator {
         }
         else
         {
-            System.out.println("Failed to lw rt leftAddress [ADD].\n");
+            String instruction = "d" + "a" + "00"+ leftAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
         }
 
     
@@ -181,7 +182,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
             
             //lw frep3 rightAddress
             String instruction = "d" + "b" + "00"+ rightAddress;
@@ -190,9 +191,10 @@ public class CodeGenerator {
         }
         else
         {
-            System.out.println("Failed to lw rt rightAddress [ADD].\n");
+            String instruction = "d" + "a" + "00"+ rightAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;        
         }
-
 
 
         //add rt rx ry
@@ -203,7 +205,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
             
             //add fpreg6 fpreg2 frepg3
             String instruction = "2" + "e" + "a" + "b" + "0000";
@@ -212,7 +214,10 @@ public class CodeGenerator {
         }
         else
         {
-            System.out.println("Failed to add rt rx ry [ADD].\n");
+            //add fpreg6 fpreg2 frepg3
+            String instruction = "2" + "e" + "a" + "b" + "0000";
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
         }
 
         //MIGHT NEED TO DO IN SW --> CORRESPONDS TO MOV
@@ -224,7 +229,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
             
             //sw frep6 resultAddress
             String instruction = "e" + "e" + "00" + resultAddress;
@@ -233,7 +238,9 @@ public class CodeGenerator {
         }
         else
         {
-            System.out.println("Failed to sw rt address [ADD].\n");
+            String instruction = "e" + "e" + "00" + resultAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
         }
 
         
@@ -702,7 +709,7 @@ public class CodeGenerator {
             Number value = getValue(num);
             if(value.intValue() == -1)
             {
-                return null;
+                value = 0;
             }
             Number address = dataSegmentpc;
             dataSegmentpc = dataSegmentpc+4;
