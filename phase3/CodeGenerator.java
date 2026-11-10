@@ -54,7 +54,7 @@ public class CodeGenerator {
         //cleared at MOV
         int arithmetic_operation_identifier = 0;
         for (var line : lines) {
-            String[] pieces = line.substring(1, line.length()).split(",");
+            String[] pieces = line.substring(1, line.length() - 1).split(",");
             String operation = pieces[0];
 
             String place1 = "";
@@ -67,6 +67,7 @@ public class CodeGenerator {
             {
                 place1 = pieces[1];
                 place2 = pieces[3];
+                
                 //skip MOV after an ADD/SUB/MULT/DIV
                 if(arithmetic_operation_identifier == 1)
                 {
@@ -471,7 +472,8 @@ public class CodeGenerator {
 
         //move value in left to the result
         String leftType = getType(left);
-        if(leftType.equals("Integer"))
+
+        if(leftType.equals("Int"))
         {
             //IDEA:
                 //store the int as a datasement
