@@ -74,7 +74,7 @@ public class CodeGenerator {
                 }
                 else
                 {
-                    mov();
+                    mov(place1, place2);
                 }
             }
             else if(operation.equals("LBL"))
@@ -153,14 +153,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "lw" + "2" + "00" + leftAddress;
+            String instruction = "d" + "2" + "00" + leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep2 leftAddress
-            String instruction = "lw" + "a" + "00"+ leftAddress;
+            String instruction = "d" + "a" + "00"+ leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -174,14 +174,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
-            String instruction = "lw" + "3" + "00" + rightAddress;
+            String instruction = "d" + "3" + "00" + rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep3 rightAddress
-            String instruction = "lw" + "b" + "00"+ rightAddress;
+            String instruction = "d" + "b" + "00"+ rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -254,14 +254,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "lw" + "2" + "00" + leftAddress;
+            String instruction = "d" + "2" + "00" + leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep2 leftAddress
-            String instruction = "lw" + "a" + "00"+ leftAddress;
+            String instruction = "d" + "a" + "00"+ leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -274,14 +274,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
-            String instruction = "lw" + "3" + "00" + rightAddress;
+            String instruction = "d" + "3" + "00" + rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep3 rightAddress
-            String instruction = "lw" + "b" + "00"+ rightAddress;
+            String instruction = "d" + "b" + "00"+ rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -354,14 +354,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "lw" + "2" + "00" + leftAddress;
+            String instruction = "d" + "2" + "00" + leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep2 leftAddress
-            String instruction = "lw" + "a" + "00"+ leftAddress;
+            String instruction = "d" + "a" + "00"+ leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -374,14 +374,14 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
-            String instruction = "lw" + "3" + "00" + rightAddress;
+            String instruction = "d" + "3" + "00" + rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
             //lw frep3 rightAddress
-            String instruction = "lw" + "b" + "00"+ rightAddress;
+            String instruction = "d" + "b" + "00"+ rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -441,10 +441,165 @@ public class CodeGenerator {
         return;
     }
 
-    static void mov()
+    static void mov(String left, String result)
     {
+        //I can do this (noor) :)
+        //recall:
+        //data segments: <String key, Numbers[2]>
+        //Numbers[0] = address
+        //Numbers [1] = value
+
+        //check if result is already in the data
+        //if not, add it to the data segment, and initialize it to 0 for now
+        //then update it as we sw 
+        if(!dataSegment.containsKey(result))
+            {
+                Number newResultAddress = dataSegmentpc;
+                dataSegmentpc = dataSegmentpc +4;
+
+                Number[] newResultElements = new Number[2];
+                newResultElements[0]= newResultAddress;
+
+                //initialize it to 0
+                newResultElements[1] = 0;
+
+                //place the data in the data segment
+                dataSegment.put(result, newResultElements);
+        }
+
+        //move value in left to the result
+        String leftType = getType(left);
+        if(leftType.equals("Integer"))
+        {
+            //IDEA:
+                //store the int as a datasement
+                //ex: left = 5
+                //DataSegment: <5, 0b000 5>
+                //then, fetch the number at that address
+                //do lw then sw like usual
+                //then delete that data segment (don't need it anymore)
+
+
+            //add the int to the data segment temporarily 
+            Number intAddress = dataSegmentpc;
+            dataSegmentpc = dataSegmentpc + 4;
+
+            Number [] intElements = new Number[2];
+            intElements[0] = intAddress;
+            intElements[1] = Integer.parseInt(left);
+            dataSegment.put(left, intElements);
+
+            //get result info:
+            Number resultElements[] = dataSegment.get(result);
+            Number resultAddress = resultElements[0];
+            resultElements[1] = intElements[1];
+
+            //update result data segment
+            dataSegment.put(result, resultElements);
+
+            //lw ireg2 leftAddress
+            String instruction1 = "d" + "2" +"00" + intAddress;
+            codeSegment.put(pc, instruction1);
+            pc = pc+4;
+
+            //sto ireg2 resultAddress
+            String instruction2 = "e" + "2" + "00" + resultAddress;
+            codeSegment.put(pc, instruction2);
+            pc = pc+4;
+
+
+            //remove the int from the data segment + update dataSegmentPC
+            dataSegment.remove(left);
+            dataSegmentpc = dataSegmentpc-4;
+
+        }
+        else if(leftType.equals("Double"))
+        {
+            //add the double as a temporary data segment
+            Number doubleAddress = dataSegmentpc;
+            dataSegmentpc = dataSegmentpc +4;
+
+            Number [] doubleElements = new Number[2];
+            doubleElements[0] = doubleAddress;
+            doubleElements[1] = Double.parseDouble(left);
+            dataSegment.put(left, doubleElements);
+
+             //get result info:
+            Number resultElements[] = dataSegment.get(result);
+            Number resultAddress = resultElements[0];
+            resultElements[1] = doubleElements[1];
+
+            //update result data segment
+            dataSegment.put(result, resultElements);
+
+            //lw frepg2 doubleAddress
+            String instruction1 = "d" + "a" +"00" + doubleAddress;
+            codeSegment.put(pc, instruction1);
+            pc = pc+4;
+
+            //sw frepg2 resultAddress
+            String instruction2 = "e" + "a" + "00" + resultAddress;
+            codeSegment.put(pc, instruction2);
+            pc = pc+4;
+           
+
+            //remove the double from the data segment + update dataSegmentPC
+            dataSegment.remove(left);
+            dataSegmentpc = dataSegmentpc-4;
+
+        }
+        else 
+        {
+            //this means left is a variable
+
+            //get left info
+            Number leftElements[] = dataSegment.get(left);
+            Number leftAddress = leftElements[0];
+            Number leftValue = leftElements[1];
+
+
+            //check if result is in data segment
+            //if not, put it in
+            
+            //get the result info
+            Number resultElements[] = dataSegment.get(result);
+            Number resultAddress = resultElements[0];
+            resultElements[1] = leftValue;
+            dataSegment.put(result, resultElements); //update the value
+            
+            
+            if(leftValue instanceof Integer)
+            {
+                //lw ireg2 leftAddress
+                String instruction1 = "d" + "2" +"00" + leftAddress;
+                codeSegment.put(pc, instruction1);
+                pc = pc+4;
+
+                //sto ireg2 resultAddress
+                String instruction2 = "e" + "2" + "00" + resultAddress;
+                codeSegment.put(pc, instruction2);
+                pc = pc+4;
+            }
+            else
+            {
+                //lw frepg2 leftAddress
+                String instruction1 = "d" + "a" +"00" + leftAddress;
+                codeSegment.put(pc, instruction1);
+                pc = pc+4;
+
+                //sw frepg2 resultAddress
+                String instruction2 = "e" + "a" + "00" + resultAddress;
+                codeSegment.put(pc, instruction2);
+                pc = pc+4;
+
+            }
+            
+        }
         //make sure to move the value to the datasegment too!!
-        return;
+        //(MOV a, b) --> lw, sw
+        //check if a is a variable or number
+        //if a is a variable, get its value from the data segment
+        //if a is a number, then make sure to add a new data segment, with b being the key
     }
 
     static void lbl()
