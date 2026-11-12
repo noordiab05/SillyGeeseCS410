@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 
 
@@ -17,13 +16,13 @@ public class CodeGenerator {
     static List<String> lines;
 
     static int pc = 0b000;
-    static HashMap<Integer, String> codeSegment = new HashMap<>();
+    static LinkedHashMap<Integer, String> codeSegment = new LinkedHashMap<>();
     
     //this will store:
     //Ex:          'a'     0b000  5
-    static HashMap<String, Number[]> dataSegment = new HashMap<>();
+    static LinkedHashMap<String, Number[]> dataSegment = new LinkedHashMap<>();
 
-    static HashMap<String, Integer> labels = new HashMap<>();
+    static LinkedHashMap<String, Integer> labels = new LinkedHashMap<>();
 
     //start at 200
     static int dataSegmentpc = 0b11001000;
@@ -164,14 +163,15 @@ public class CodeGenerator {
         String haltInstruction = "f0000000";
         codeSegment.put(pc, haltInstruction );
 
-        TreeMap<Integer, String> sortedCodeSegment = new TreeMap<>(codeSegment);
+        //TreeMap<Integer, String> sortedCodeSegment = new TreeMap<>(codeSegment);
 
         //add the code segment in the file
-        sortedCodeSegment.forEach((address, instruction)->{
+        codeSegment.forEach((address, instruction)->{
             try {
                 int intInstruction = Integer.parseInt(instruction, 16);
                 String binaryInstruction = String.format("%32s", Integer.toBinaryString(intInstruction)).replace(' ', '0');
-                String outputToWrite = "" + address + ": " + binaryInstruction + "\n";
+                String binaryAddress = String.format("%32s", Integer.toBinaryString(address)).replace(' ', '0');
+                String outputToWrite = "" + binaryAddress + ": " + binaryInstruction + "\n";
 
                 Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
             } catch (Exception e) {
@@ -184,10 +184,12 @@ public class CodeGenerator {
         while(pc < dataSegmentpc)
         {
             try {
-                String outputToWrite = "" + pc + ": " + 00000000000000000000000000000000 + "\n";
+                String binaryAddress = String.format("%32s", Integer.toBinaryString(pc)).replace(' ', '0');
 
+                String outputToWrite = "" + binaryAddress + ": " + 00000000000000000000000000000000 + "\n";
+               
                 pc = pc+4;
-
+                
                 Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
             } catch (Exception e) {
                 System.out.println("Couldn't write to output file.");
@@ -201,9 +203,9 @@ public class CodeGenerator {
             try {
                 int data_value = element_arr[1].intValue();
                 String binaryData = String.format("%32s", Integer.toBinaryString(data_value)).replace(' ', '0');
-
+                String binaryAddress = String.format("%32s", Integer.toBinaryString(element_arr[0].intValue())).replace(' ', '0');
                                             //address               //data        //the variable it represents
-                String outputToWrite = "" + element_arr[0] + ": " + binaryData + "" + variable + "\n";
+                String outputToWrite = "" + binaryAddress+ ": " + binaryData + "" + variable + "\n";
 
                 Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
             } catch (Exception e) {
@@ -236,7 +238,8 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "d" + "2" + "00" + leftAddress;
+            System.out.println(leftAddress);
+            String instruction = "d" + "2" + "0000" + leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
