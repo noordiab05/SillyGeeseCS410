@@ -88,7 +88,7 @@ public class CodeGenerator {
             else if(operation.equals("JMP"))
             {
                 place1 = pieces[5];
-                jmp();
+                jmp(place1);
             }
             else if (operation.equals("ADD"))
             {
@@ -128,9 +128,19 @@ public class CodeGenerator {
                 place2 = pieces[2];
                 place3 = pieces[4];
                 place4 = pieces[5];
-                tst();
+                tst(place1, place2, place3, place4);
             }
             
+        }
+
+        // replace "jmp-redo" instructions with correct instruction
+        for (var instruction_addr : codeSegment.keySet()) {
+            if (codeSegment.get(instruction_addr).startsWith("jmp-redo")) {
+                String label = codeSegment.get(instruction_addr).substring(8);
+                // bal addr
+                String instruction = "6" + "000" + label;
+                codeSegment.put(pc, instruction);
+            }
         }
         return;
     }
@@ -625,12 +635,39 @@ public class CodeGenerator {
         return;
     }
 
-    static void tst()
+    static void tst(String left, String right, String comp, String dest)
     {
+        //get the address 
+        String leftAddress = getAddress(left);
+        String rightAddress = getAddress(right);
+
+        if(leftAddress==null || rightAddress == null)
+        {
+            System.out.println("Issue with the addresses being null.\n");
+        }
+
+        Number [] leftElements = dataSegment.get(left);
+        Number [] rightElements = dataSegment.get(right);
+
+        // jmp(dest); ??
         return;
     }
-    static void jmp()
+    static void jmp(String dest)
     {
+        int label = labels.getOrDefault(dest, -1);
+
+        // the addr will need to be updated later
+        if (label == -1) {
+            String instruction = "jmp-redo" + dest;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+            return;
+        }
+
+        // bal addr
+        String instruction = "6" + "000" + label;
+        codeSegment.put(pc, instruction);
+        pc = pc+4;
         return;
     }
 
