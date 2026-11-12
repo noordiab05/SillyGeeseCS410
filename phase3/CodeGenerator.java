@@ -128,7 +128,7 @@ public class CodeGenerator {
                 place2 = pieces[2];
                 place3 = pieces[4];
                 place4 = pieces[5];
-                tst();
+                tst(place1, place2, place3, place4);
             }
             
         }
@@ -628,8 +628,21 @@ public class CodeGenerator {
         return;
     }
 
-    static void tst()
+    static void tst(String left, String right, String comp, String dest)
     {
+        //get the address 
+        String leftAddress = getAddress(left);
+        String rightAddress = getAddress(right);
+
+        if(leftAddress==null || rightAddress == null)
+        {
+            System.out.println("Issue with the addresses being null.\n");
+        }
+
+        Number [] leftElements = dataSegment.get(left);
+        Number [] rightElements = dataSegment.get(right);
+
+        // jmp(dest); ??
         return;
     }
     static void jmp(String dest)
