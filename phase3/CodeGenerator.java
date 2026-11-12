@@ -168,7 +168,7 @@ public class CodeGenerator {
             try {
                 int intInstruction = Integer.parseInt(instruction, 16);
                 String binaryInstruction = String.format("%32s", Integer.toBinaryString(intInstruction)).replace(' ', '0');
-                String outputToWrite = "" + address + ": " + binaryInstruction;
+                String outputToWrite = "" + address + ": " + binaryInstruction + "\n";
 
                 Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
             } catch (Exception e) {
@@ -181,7 +181,7 @@ public class CodeGenerator {
         while(pc < dataSegmentpc)
         {
             try {
-                String outputToWrite = "" + pc + ": " + 00000000000000000000000000000000;
+                String outputToWrite = "" + pc + ": " + 00000000000000000000000000000000 + "\n";
 
                 pc = pc+4;
 
@@ -200,7 +200,7 @@ public class CodeGenerator {
                 String binaryData = String.format("%32s", Integer.toBinaryString(data_value)).replace(' ', '0');
 
                                             //address               //data        //the variable it represents
-                String outputToWrite = "" + element_arr[0] + ": " + binaryData + "" + variable;
+                String outputToWrite = "" + element_arr[0] + ": " + binaryData + "" + variable + "\n";
 
                 Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
             } catch (Exception e) {
