@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 public class CodeGenerator {
     static Path inputFile = Path.of("phase2", "Atoms.txt");
     static Path outputFile = Path.of("phase3", "Binary.txt");
@@ -61,7 +62,6 @@ public class CodeGenerator {
             String place2 = "";
             String place3 = "";
             String place4 = "";
-            String place5 = "";
 
             if(operation.equals("MOV"))
             {
@@ -136,9 +136,19 @@ public class CodeGenerator {
         // replace "jmp-redo" instructions with correct instruction
         for (var instruction_addr : codeSegment.keySet()) {
             if (codeSegment.get(instruction_addr).startsWith("jmp-redo")) {
-                String label = codeSegment.get(instruction_addr).substring(8);
+                String dest = codeSegment.get(instruction_addr).substring(8);
+                int label = labels.get(dest);
                 // bal addr
                 String instruction = "6" + "000" + label;
+                codeSegment.put(pc, instruction);
+            }
+
+            if (codeSegment.get(instruction_addr).startsWith("tst-redo")) {
+                String almost_instruction = codeSegment.get(instruction_addr).substring(8);
+                String dest = almost_instruction.substring(4);
+                int label = labels.get(dest);
+                // branch addr
+                String instruction = almost_instruction.substring(0, 4) + label;
                 codeSegment.put(pc, instruction);
             }
         }
@@ -642,9 +652,91 @@ public class CodeGenerator {
         Number [] leftElements = dataSegment.get(left);
         Number [] rightElements = dataSegment.get(right);
 
-        // jmp(dest); ??
+        int comp_int = Integer.parseInt(comp);
+        comp_int += 7;
+        String comp_hex = Integer.toHexString(comp_int);
+
+        //lw rt leftAddress
+        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
+        {
+            //lw ireg2 leftAddress
+            String instruction = "d" + "2" + "00" + leftAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+            
+            //lw frep2 leftAddress
+            String instruction = "d" + "a" + "00"+ leftAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else
+        {
+            System.out.println("Failed to lw rt leftAddress [TST].\n");
+        }
+
+        //lw rt rightAddress
+        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
+        {
+            //lw ireg3 rightAddress
+            String instruction = "d" + "3" + "00" + rightAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+            
+            //lw frep3 rightAddress
+            String instruction = "d" + "b" + "00"+ rightAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else
+        {
+            System.out.println("Failed to lw rt rightAddress [TST].\n");
+        }
+
+        int label = labels.getOrDefault(dest, -1);
+
+
+         //add rt rx ry
+        if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
+        {
+            // the addr will need to be updated later
+            if (label == -1) {
+                String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest;
+                codeSegment.put(pc, instruction);
+                pc = pc+4;
+                return;
+            }
+
+            //add ireg6 ireg2 ireg3
+            String instruction = comp_hex +"0"+"2"+"3"+label;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+            // the addr will need to be updated later
+            if (label == -1) {
+                String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
+                codeSegment.put(pc, instruction);
+                pc = pc+4;
+                return;
+            }
+
+            //add fpreg6 fpreg2 frepg3
+            String instruction = comp_hex + "0" + "a" + "b" + label;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
+        }
+        else
+        {
+            System.out.println("Failed to branch rx ry ADDR [TST].\n");
+        }
+
         return;
     }
+
     static void jmp(String dest)
     {
         int label = labels.getOrDefault(dest, -1);
