@@ -3,6 +3,7 @@ package phase3;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,14 +17,15 @@ public class CodeGenerator {
 
     static int pc = 0b000;
     static HashMap<Integer, String> codeSegment = new HashMap<>();
-
+    
     //this will store:
     //Ex:          'a'     0b000  5
     static HashMap<String, Number[]> dataSegment = new HashMap<>();
 
     static HashMap<String, Integer> labels = new HashMap<>();
 
-    static int dataSegmentpc = 0b100;
+    //start at 200
+    static int dataSegmentpc = 0b11001000;
 
     public static void main(String[] args) {
         try {
@@ -51,6 +53,9 @@ public class CodeGenerator {
 
     static void Generate() {
 
+        String first_instruction = String.format("%32s", Integer.toBinaryString(4)).replace(' ', '0');
+        codeSegment.put(0b000, first_instruction);
+        pc = pc+4;
         //turns 1 if add/sub/mult/div occurs
         //cleared at MOV
         int arithmetic_operation_identifier = 0;
@@ -152,6 +157,59 @@ public class CodeGenerator {
                 codeSegment.put(instruction_addr, instruction);
             }
         }
+
+        //start writing to output file
+        //put the halt instruction
+        String haltInstruction = "f0000000";
+        codeSegment.put(pc, haltInstruction );
+
+        //add the code Segment in the file
+        codeSegment.forEach((address, instruction)->{
+            try {
+                int intInstruction = Integer.parseInt(instruction, 16);
+                String binaryInstruction = String.format("%32s", Integer.toBinaryString(intInstruction)).replace(' ', '0');
+                String outputToWrite = "" + address + ": " + binaryInstruction;
+
+                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+            } catch (Exception e) {
+                System.out.println("Couldn't write to output file.");
+                System.exit(0);
+            }
+        });
+
+        //add the 0s
+        while(pc < dataSegmentpc)
+        {
+            try {
+                String outputToWrite = "" + pc + ": " + 00000000000000000000000000000000;
+
+                pc = pc+4;
+
+                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+            } catch (Exception e) {
+                System.out.println("Couldn't write to output file.");
+                System.exit(0);
+            }
+        }
+
+        //then add the datasegment
+
+        dataSegment.forEach((variable, element_arr)->{
+            try {
+                int data_value = element_arr[1].intValue();
+                String binaryData = String.format("%32s", Integer.toBinaryString(data_value)).replace(' ', '0');
+
+                                            //address               //data        //the variable it represents
+                String outputToWrite = "" + element_arr[0] + ": " + binaryData + "" + variable;
+
+                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+            } catch (Exception e) {
+                System.out.println("Couldn't write to output file.");
+                System.exit(0);
+            }
+        });
+
+        
         return;
     }
 
