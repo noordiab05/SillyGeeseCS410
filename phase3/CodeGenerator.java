@@ -686,10 +686,12 @@ public class CodeGenerator {
         Number [] rightElements = dataSegment.get(right);
 
         int comp_int = Integer.parseInt(comp);
+
+        // opcodes for branch ops are 7 more than their equivalent atom representation
         comp_int += 7;
         String comp_hex = Integer.toHexString(comp_int);
 
-        //lw rt leftAddress
+        //lw rx leftAddress
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
@@ -699,7 +701,7 @@ public class CodeGenerator {
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
-            //lw frep2 leftAddress
+            //lw fpreg2 leftAddress
             String instruction = "d" + "a" + "00"+ leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
@@ -709,7 +711,7 @@ public class CodeGenerator {
             System.out.println("Failed to lw rt leftAddress [TST].\n");
         }
 
-        //lw rt rightAddress
+        //lw ry rightAddress
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
@@ -719,7 +721,7 @@ public class CodeGenerator {
         }
         else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
-            //lw frep3 rightAddress
+            //lw fpreg3 rightAddress
             String instruction = "d" + "b" + "00"+ rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
@@ -731,8 +733,7 @@ public class CodeGenerator {
 
         int label = labels.getOrDefault(dest, -1);
 
-
-         //add rt rx ry
+        // branch rx ry addr
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             // the addr will need to be updated later
@@ -740,10 +741,9 @@ public class CodeGenerator {
                 String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
-                return;
             }
 
-            //add ireg6 ireg2 ireg3
+            // branch ireg2 ireg3 label
             String instruction = comp_hex +"0"+"2"+"3"+label;
             codeSegment.put(pc, instruction);
             pc = pc+4;
@@ -754,17 +754,16 @@ public class CodeGenerator {
                 String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
-                return;
             }
 
-            //add fpreg6 fpreg2 frepg3
+            // branch fpreg2 frepg3 label
             String instruction = comp_hex + "0" + "a" + "b" + label;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         else
         {
-            System.out.println("Failed to branch rx ry ADDR [TST].\n");
+            System.out.println("Failed to branch rx ry addr [TST].\n");
         }
 
         return;
