@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 
 
@@ -163,8 +164,10 @@ public class CodeGenerator {
         String haltInstruction = "f0000000";
         codeSegment.put(pc, haltInstruction );
 
-        //add the code Segment in the file
-        codeSegment.forEach((address, instruction)->{
+        TreeMap<Integer, String> sortedCodeSegment = new TreeMap<>(codeSegment);
+
+        //add the code segment in the file
+        sortedCodeSegment.forEach((address, instruction)->{
             try {
                 int intInstruction = Integer.parseInt(instruction, 16);
                 String binaryInstruction = String.format("%32s", Integer.toBinaryString(intInstruction)).replace(' ', '0');
