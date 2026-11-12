@@ -133,14 +133,14 @@ public class CodeGenerator {
             
         }
 
-        // replace "jmp-redo" instructions with correct instruction
+        // replace "jmp-redo" / "tst-redo" instructions with correct instruction
         for (var instruction_addr : codeSegment.keySet()) {
             if (codeSegment.get(instruction_addr).startsWith("jmp-redo")) {
                 String dest = codeSegment.get(instruction_addr).substring(8);
                 int label = labels.get(dest);
                 // bal addr
                 String instruction = "6" + "000" + label;
-                codeSegment.put(pc, instruction);
+                codeSegment.put(instruction_addr, instruction);
             }
 
             if (codeSegment.get(instruction_addr).startsWith("tst-redo")) {
@@ -149,7 +149,7 @@ public class CodeGenerator {
                 int label = labels.get(dest);
                 // branch addr
                 String instruction = almost_instruction.substring(0, 4) + label;
-                codeSegment.put(pc, instruction);
+                codeSegment.put(instruction_addr, instruction);
             }
         }
         return;
