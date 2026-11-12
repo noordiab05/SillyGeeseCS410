@@ -53,7 +53,7 @@ public class CodeGenerator {
 
     static void Generate() {
 
-        String first_instruction = String.format("%32s", Integer.toBinaryString(4)).replace(' ', '0');
+        String first_instruction = "00000004";
         codeSegment.put(0b000, first_instruction);
         pc = pc+4;
         //turns 1 if add/sub/mult/div occurs
@@ -164,7 +164,9 @@ public class CodeGenerator {
         codeSegment.put(pc, haltInstruction );
 
         //TreeMap<Integer, String> sortedCodeSegment = new TreeMap<>(codeSegment);
-
+        codeSegment.forEach((address, instruction)->{
+            System.out.println("The address " + address + " contains the instruction: " + instruction);
+        });
         //add the code segment in the file
         codeSegment.forEach((address, instruction)->{
             try {
@@ -716,12 +718,12 @@ public class CodeGenerator {
             dataSegment.put(result, resultElements);
 
             //lw ireg2 leftAddress
-            String instruction1 = "d" + "2" +"00" + intAddress;
+            String instruction1 = "d" + "2" +"0000" + intAddress;
             codeSegment.put(pc, instruction1);
             pc = pc+4;
 
             //sto ireg2 resultAddress
-            String instruction2 = "e" + "2" + "00" + resultAddress;
+            String instruction2 = "e" + "2" + "0000" + resultAddress;
             codeSegment.put(pc, instruction2);
             pc = pc+4;
 
@@ -751,12 +753,12 @@ public class CodeGenerator {
             dataSegment.put(result, resultElements);
 
             //lw frepg2 doubleAddress
-            String instruction1 = "d" + "a" +"00" + doubleAddress;
+            String instruction1 = "d" + "a" +"0000" + doubleAddress;
             codeSegment.put(pc, instruction1);
             pc = pc+4;
 
             //sw frepg2 resultAddress
-            String instruction2 = "e" + "a" + "00" + resultAddress;
+            String instruction2 = "e" + "a" + "0000" + resultAddress;
             codeSegment.put(pc, instruction2);
             pc = pc+4;
            
@@ -789,24 +791,24 @@ public class CodeGenerator {
             if(leftValue instanceof Integer)
             {
                 //lw ireg2 leftAddress
-                String instruction1 = "d" + "2" +"00" + leftAddress;
+                String instruction1 = "d" + "2" +"0000" + leftAddress;
                 codeSegment.put(pc, instruction1);
                 pc = pc+4;
 
                 //sto ireg2 resultAddress
-                String instruction2 = "e" + "2" + "00" + resultAddress;
+                String instruction2 = "e" + "2" + "0000" + resultAddress;
                 codeSegment.put(pc, instruction2);
                 pc = pc+4;
             }
             else
             {
                 //lw frepg2 leftAddress
-                String instruction1 = "d" + "a" +"00" + leftAddress;
+                String instruction1 = "d" + "a" +"0000" + leftAddress;
                 codeSegment.put(pc, instruction1);
                 pc = pc+4;
 
                 //sw frepg2 resultAddress
-                String instruction2 = "e" + "a" + "00" + resultAddress;
+                String instruction2 = "e" + "a" + "0000" + resultAddress;
                 codeSegment.put(pc, instruction2);
                 pc = pc+4;
 
@@ -856,40 +858,46 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "d" + "2" + "00" + leftAddress;
+            String instruction = "d" + "2" + "0000" + leftAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
-            //lw fpreg2 leftAddress
-            String instruction = "d" + "a" + "00"+ leftAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
+        //     //lw fpreg2 leftAddress
+        //     String instruction = "d" + "a" + "0000"+ leftAddress;
+        //     codeSegment.put(pc, instruction);
+        //     pc = pc+4;
+        // }
         else
         {
-            System.out.println("Failed to lw rt leftAddress [TST].\n");
+             //lw fpreg2 leftAddress
+            String instruction = "d" + "a" + "0000"+ leftAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
         }
 
         //lw ry rightAddress
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
-            String instruction = "d" + "3" + "00" + rightAddress;
+            String instruction = "d" + "3" + "0000" + rightAddress;
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
             
-            //lw fpreg3 rightAddress
-            String instruction = "d" + "b" + "00"+ rightAddress;
-            codeSegment.put(pc, instruction);
-            pc = pc+4;
-        }
+        //     //lw fpreg3 rightAddress
+        //     String instruction = "d" + "b" + "0000"+ rightAddress;
+        //     codeSegment.put(pc, instruction);
+        //     pc = pc+4;
+        // }
         else
         {
-            System.out.println("Failed to lw rt rightAddress [TST].\n");
+            //lw fpreg3 rightAddress
+            String instruction = "d" + "b" + "0000"+ rightAddress;
+            codeSegment.put(pc, instruction);
+            pc = pc+4;
         }
 
         int label = labels.getOrDefault(dest, -1);
@@ -897,6 +905,8 @@ public class CodeGenerator {
         // branch rx ry addr
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
+            System.out.println(comp_hex);
+            System.out.println(label);
             // the addr will need to be updated later
             if (label == -1) {
                 String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest;
@@ -909,8 +919,21 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            // the addr will need to be updated later
+        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
+        //     // the addr will need to be updated later
+        //     if (label == -1) {
+        //         String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
+        //         codeSegment.put(pc, instruction);
+        //         pc = pc+4;
+        //     }
+
+        //     // branch fpreg2 frepg3 label
+        //     String instruction = comp_hex + "0" + "a" + "b" + label;
+        //     codeSegment.put(pc, instruction);
+        //     pc = pc+4;
+        // }
+        else
+        {
             if (label == -1) {
                 String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
                 codeSegment.put(pc, instruction);
@@ -921,10 +944,6 @@ public class CodeGenerator {
             String instruction = comp_hex + "0" + "a" + "b" + label;
             codeSegment.put(pc, instruction);
             pc = pc+4;
-        }
-        else
-        {
-            System.out.println("Failed to branch rx ry addr [TST].\n");
         }
 
         return;
