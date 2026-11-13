@@ -144,7 +144,7 @@ public class CodeGenerator {
                 String dest = codeSegment.get(instruction_addr).substring(8);
                 int label = labels.get(dest);
                 // bal addr
-                String instruction = "6" + "000" + label;
+                String instruction = "6" + "000" + label;  // TODO: add 0-padding to label
                 codeSegment.put(instruction_addr, instruction);
             }
 
@@ -153,7 +153,7 @@ public class CodeGenerator {
                 String dest = almost_instruction.substring(4);
                 int label = labels.get(dest);
                 // branch addr
-                String instruction = almost_instruction.substring(0, 4) + label;
+                String instruction = almost_instruction.substring(0, 4) + label;  // TODO: add 0-padding to label
                 codeSegment.put(instruction_addr, instruction);
             }
         }
@@ -924,6 +924,7 @@ public class CodeGenerator {
                 String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
+                return;
             }
 
             // branch ireg2 ireg3 label
@@ -950,6 +951,7 @@ public class CodeGenerator {
                 String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
+                return;
             }
 
             // branch fpreg2 frepg3 label
