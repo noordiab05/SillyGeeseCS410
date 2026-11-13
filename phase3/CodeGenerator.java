@@ -24,8 +24,8 @@ public class CodeGenerator {
 
     static LinkedHashMap<String, Integer> labels = new LinkedHashMap<>();
 
-    //start at 200
-    static int dataSegmentpc = 0b11001000;
+    //start at 400
+    static int dataSegmentpc = 0b110010000;
 
     public static void main(String[] args) {
         try {
@@ -190,7 +190,7 @@ public class CodeGenerator {
             try {
                 String binaryAddress = String.format("%32s", Integer.toBinaryString(pc)).replace(' ', '0');
 
-                String outputToWrite = "" + binaryAddress + ": " + 00000000000000000000000000000000 + "\n";
+                String outputToWrite = "" + binaryAddress + ": " + "00000000000000000000000000000000" + "\n";
                
                 pc = pc+4;
                 
