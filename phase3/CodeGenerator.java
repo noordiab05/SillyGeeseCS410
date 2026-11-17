@@ -11,7 +11,8 @@ import java.util.List;
 
 public class CodeGenerator {
     static Path inputFile = Path.of("phase2", "Atoms.txt");
-    static Path outputFile = Path.of("phase3", "Binary.txt");
+    static Path outputHumanLegibleFile = Path.of("phase3", "HumanLegibleBinary.txt");
+    static Path outputBinaryFile = Path.of("phase3", "Binary.bin");
 
     static List<String> lines;
 
@@ -38,8 +39,9 @@ public class CodeGenerator {
         }
 
         try {
-            // overwrite output file to make it empty
-            Files.writeString(outputFile, "");
+            // overwrite output files to make them empty
+            Files.writeString(outputHumanLegibleFile, "");
+            Files.writeString(outputBinaryFile, "");
         }
         catch(IOException e)
         {
@@ -145,7 +147,7 @@ public class CodeGenerator {
                 int label = labels.get(dest);
 
                 // bal addr
-                String instruction = "6" + "000" + String.format("%4s", label).replace(' ','0');  // TODO: add 0-padding to label
+                String instruction = "6" + "000" + String.format("%4s", label).replace(' ','0');
                 codeSegment.put(instruction_addr, instruction);
             }
 
@@ -155,7 +157,7 @@ public class CodeGenerator {
                 String dest = almost_instruction.substring(4);
                 int label = labels.get(dest);
                 // branch addr
-                String instruction = almost_instruction.substring(0, 4) + String.format("%4s", label).replace(' ','0');  // TODO: add 0-padding to label
+                String instruction = almost_instruction.substring(0, 4) + String.format("%4s", label).replace(' ','0');
                 codeSegment.put(instruction_addr, instruction);
             }
         }
@@ -177,9 +179,10 @@ public class CodeGenerator {
                 String binaryAddress = String.format("%32s", Integer.toBinaryString(address)).replace(' ', '0');
                 String outputToWrite = "" + binaryAddress + ": " + binaryInstruction + "\n";
 
-                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.writeString(outputHumanLegibleFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.write(outputBinaryFile, bitStringToBytes(binaryInstruction), StandardOpenOption.APPEND);
             } catch (Exception e) {
-                System.out.println("Couldn't write to output file.");
+                System.out.println("Couldn't write to output files.");
                 System.exit(0);
             }
         });
@@ -189,14 +192,15 @@ public class CodeGenerator {
         {
             try {
                 String binaryAddress = String.format("%32s", Integer.toBinaryString(pc)).replace(' ', '0');
-
-                String outputToWrite = "" + binaryAddress + ": " + "00000000000000000000000000000000" + "\n";
+                String binaryInstruction = "00000000000000000000000000000000";
+                String outputToWrite = "" + binaryAddress + ": " + binaryInstruction + "\n";
                
                 pc = pc+4;
                 
-                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.writeString(outputHumanLegibleFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.write(outputBinaryFile, bitStringToBytes(binaryInstruction), StandardOpenOption.APPEND);
             } catch (Exception e) {
-                System.out.println("Couldn't write to output file.");
+                System.out.println("Couldn't write to output files.");
                 System.exit(0);
             }
         }
@@ -211,13 +215,15 @@ public class CodeGenerator {
                                             //address               //data        //the variable it represents
                 String outputToWrite = "" + binaryAddress+ ": " + binaryData + "....." + variable + "\n";
 
-                Files.writeString(outputFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.writeString(outputHumanLegibleFile, outputToWrite, StandardOpenOption.APPEND);
+                Files.write(outputBinaryFile, bitStringToBytes(binaryData), StandardOpenOption.APPEND);
             } catch (Exception e) {
-                System.out.println("Couldn't write to output file.");
+                System.out.println("Couldn't write to output files.");
                 System.exit(0);
             }
         });
 
+        // TODO: use BitString Java API to convert bitstrings to actual binary text
         
         return;
     }
@@ -1083,5 +1089,14 @@ public class CodeGenerator {
         }
     }
 
+    static byte[] bitStringToBytes(String bitString) {
+        byte[] bytes = new byte[bitString.length() / 8];
+        for (int i = 0; i < bytes.length; i++) {
+            String byteChunk = bitString.substring(i * 8, (i + 1) * 8);
+            // Parse the 8-bit chunk as an unsigned int (base 2) and cast to byte
+            bytes[i] = (byte) Integer.parseInt(byteChunk, 2);
+        }
+        return bytes;
+    }
     
 }
