@@ -167,6 +167,7 @@ public class CodeGenerator {
         //put the halt instruction
         String haltInstruction = "f0000000";
         codeSegment.put(pc, haltInstruction );
+        pc = pc+4;
 
         //TreeMap<Integer, String> sortedCodeSegment = new TreeMap<>(codeSegment);
         codeSegment.forEach((address, instruction)->{
@@ -633,10 +634,25 @@ public class CodeGenerator {
             Number intAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc + 4;
 
+
+            //basic initialization
             Number [] intElements = new Number[2];
-            intElements[0] = intAddress;
-            intElements[1] = Integer.parseInt(left);
-            dataSegment.put(left, intElements);
+            intElements[0] = 0;
+            intElements[1] = 0;
+            if(dataSegment.get(left) == null)
+            {
+                intElements[0] = intAddress;
+                intElements[1] = Integer.parseInt(left);
+                dataSegment.put(left, intElements);
+
+            }
+            else
+            {
+                intElements[0] = dataSegment.get(left)[0];
+                intElements[1] = dataSegment.get(left)[1];
+            }
+
+            
 
             //get result info:
             Number resultElements[] = dataSegment.get(result);
@@ -674,10 +690,25 @@ public class CodeGenerator {
             Number doubleAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc +4;
 
+            //basic initialization
             Number [] doubleElements = new Number[2];
-            doubleElements[0] = doubleAddress;
-            doubleElements[1] = Double.parseDouble(left);
-            dataSegment.put(left, doubleElements);
+            doubleElements[0] = 0;
+            doubleElements[1] = 0;
+            if(dataSegment.get(left) == null)
+            {
+                doubleElements[0] = doubleAddress;
+                doubleElements[1] = Double.parseDouble(left);
+                dataSegment.put(left, doubleElements);
+
+            }
+            else
+            {
+                doubleElements[0] = dataSegment.get(left)[0];
+                doubleElements[1] = dataSegment.get(left)[1];
+            }
+
+
+           
 
              //get result info:
             Number resultElements[] = dataSegment.get(result);
