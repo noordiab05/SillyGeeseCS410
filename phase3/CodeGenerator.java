@@ -210,7 +210,15 @@ public class CodeGenerator {
 
         dataSegment.forEach((variable, element_arr)->{
             try {
-                int data_value = Float.floatToIntBits(element_arr[1].floatValue());
+                int data_value;
+                if(element_arr[1] instanceof Integer)
+                {
+                    data_value = element_arr[1].intValue();
+                }
+                else
+                {
+                     data_value = Float.floatToIntBits(element_arr[1].floatValue());
+                }
                 String binaryData = String.format("%32s", Integer.toBinaryString(data_value)).replace(' ', '0');
                 String binaryAddress = String.format("%32s", Integer.toBinaryString(element_arr[0].intValue())).replace(' ', '0');
                                             //address               //data        //the variable it represents
