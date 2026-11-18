@@ -259,13 +259,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
-            
-        //     //lw frep2 leftAddress
-        //     String instruction = "d" + "a" + "00"+ leftAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
             String instruction = "d" + "a" + "00"+ String.format("%4s", leftAddress).replace(' ','0');
@@ -282,13 +275,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
-            
-        //     //lw frep3 rightAddress
-        //     String instruction = "d" + "b" + "00"+ rightAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
             String instruction = "d" + "a" + "00"+ String.format("%4s", rightAddress).replace(' ','0');
@@ -305,13 +291,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
-            
-        //     //add fpreg6 fpreg2 frepg3
-        //     String instruction = "2" + "e" + "a" + "b" + "0000";
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
             //add fpreg6 fpreg2 frepg3
@@ -329,13 +308,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double) || (leftElements[1] instanceof Float) && (rightElements[1] instanceof Float)) {
-            
-        //     //sw frep6 resultAddress
-        //     String instruction = "e" + "e" + "00" + resultAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
             String instruction = "e" + "e" + "00" + String.format("%4s", resultAddress).replace(' ','0');
@@ -368,13 +340,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw frep2 leftAddress
-        //     String instruction = "d" + "a" + "00"+ leftAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
            //lw frep2 leftAddress
@@ -391,13 +356,6 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw frep3 rightAddress
-        //     String instruction = "d" + "b" + "00"+ rightAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
         else
         {
              //lw frep3 rightAddress
@@ -414,13 +372,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //sub fpreg6 fpreg2 frepg3
-        //     String instruction = "3" + "e" + "a" + "b" + "0000";
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //sub fpreg6 fpreg2 frepg3
@@ -439,13 +391,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //sw frep6 resultAddress
-        //     String instruction = "e" + "e" + "00" + resultAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
            
@@ -505,13 +451,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw frep3 rightAddress
-        //     String instruction = "d" + "b" + "00"+ rightAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+       
         else
         {
             //lw frep3 rightAddress
@@ -528,13 +468,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //mul fpreg6 fpreg2 frepg3
-        //     String instruction = "4" + "e" + "a" + "b" + "0000";
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //mul fpreg6 fpreg2 frepg3
@@ -552,13 +486,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //sw frep6 resultAddress
-        //     String instruction = "e" + "e" + "00" + resultAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //sw frep6 resultAddress
@@ -596,13 +524,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw frep2 leftAddress
-        //     String instruction = "lw" + "a" + "0000"+ leftAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
            //lw frep2 leftAddress
@@ -620,13 +542,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw frep3 rightAddress
-        //     String instruction = "lw" + "b" + "0000"+ rightAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //lw frep3 rightAddress
@@ -645,13 +561,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //div fpreg6 fpreg2 frepg3
-        //     String instruction = "5" + "e" + "a" + "b" + "0000";
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //div fpreg6 fpreg2 frepg3
@@ -669,13 +579,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //sw frep6 resultAddress
-        //     String instruction = "e" + "e" + "0000" + resultAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //sw frep6 resultAddress
@@ -839,11 +743,7 @@ public class CodeGenerator {
             }
             
         }
-        //make sure to move the value to the datasegment too!!
-        //(MOV a, b) --> lw, sw
-        //check if a is a variable or number
-        //if a is a variable, get its value from the data segment
-        //if a is a number, then make sure to add a new data segment, with b being the key
+        
     }
 
     static void lbl(String dest)
@@ -886,13 +786,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw fpreg2 leftAddress
-        //     String instruction = "d" + "a" + "0000"+ leftAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
              //lw fpreg2 leftAddress
@@ -909,13 +803,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-            
-        //     //lw fpreg3 rightAddress
-        //     String instruction = "d" + "b" + "0000"+ rightAddress;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             //lw fpreg3 rightAddress
@@ -944,19 +832,7 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
-        // else if ((leftElements[1] instanceof Double) && (rightElements[1] instanceof Double)) {
-        //     // the addr will need to be updated later
-        //     if (label == -1) {
-        //         String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
-        //         codeSegment.put(pc, instruction);
-        //         pc = pc+4;
-        //     }
-
-        //     // branch fpreg2 frepg3 label
-        //     String instruction = comp_hex + "0" + "a" + "b" + label;
-        //     codeSegment.put(pc, instruction);
-        //     pc = pc+4;
-        // }
+        
         else
         {
             if (label == -1) {
