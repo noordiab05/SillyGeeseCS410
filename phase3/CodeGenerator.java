@@ -25,8 +25,9 @@ public class CodeGenerator {
 
     static LinkedHashMap<String, Integer> labels = new LinkedHashMap<>();
 
-    //start at 400
-    static int dataSegmentpc = 0b110010000;
+    //start data segment at address 400
+    static final int DATA_SEGMENT_START = 0b110010000;
+    static int dataSegmentpc = DATA_SEGMENT_START;
 
     public static void main(String[] args) {
         try {
@@ -187,8 +188,8 @@ public class CodeGenerator {
             }
         });
 
-        //add the 0s
-        while(pc < dataSegmentpc)
+        //add 0s to fill the remaining space until the data segment starts
+        while(pc < DATA_SEGMENT_START)
         {
             try {
                 String binaryAddress = String.format("%32s", Integer.toBinaryString(pc)).replace(' ', '0');
