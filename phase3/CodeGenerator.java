@@ -661,8 +661,11 @@ public class CodeGenerator {
             pc = pc+4;
 
             //remove the int from the data segment + update dataSegmentPC
-            dataSegment.remove(left);
-            dataSegmentpc = dataSegmentpc-4;
+            // dataSegment.remove(left);
+            // dataSegmentpc = dataSegmentpc-4;
+            
+            // System.out.println("Left element is: " + left);
+            
 
         }
         else if(leftType.equals("Double"))
@@ -697,9 +700,10 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction2);
             pc = pc+4;
 
-            //remove the double from the data segment + update dataSegmentPC
-            dataSegment.remove(left);
-            dataSegmentpc = dataSegmentpc-4;
+            // //remove the double from the data segment + update dataSegmentPC
+            // System.out.println("Left element is: " + left);
+            // dataSegment.remove(left);
+            // dataSegmentpc = dataSegmentpc-4;
 
         }
         else 
