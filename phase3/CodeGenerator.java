@@ -222,8 +222,6 @@ public class CodeGenerator {
                 System.exit(0);
             }
         });
-
-        // TODO: use BitString Java API to convert bitstrings to actual binary text
         
         return;
     }
