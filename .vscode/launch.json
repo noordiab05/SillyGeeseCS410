@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "X410",
+            "request": "launch",
+            "mainClass": "X410",
+            "projectName": "SillyGeeseCS410_27522e92"
+        },
+        {
+            "type": "java",
+            "name": "X410 w/ File Args",
+            "request": "launch",
+            "mainClass": "X410",
+            "projectName": "SillyGeeseCS410_27522e92",
+            "console": "integratedTerminal",
+            "args": ["phase3/Binary.bin", "output/Output.bin"]
+        },
+        {
+            "type": "java",
+            "name": "Scanner",
+            "request": "launch",
+            "mainClass": "phase1.Scanner",
+            "projectName": "SillyGeeseCS410_27522e92"
+        },
+        {
+            "type": "java",
+            "name": "Parser",
+            "request": "launch",
+            "mainClass": "phase2.Parser",
+            "projectName": "SillyGeeseCS410_27522e92"
+        },
+        {
+            "type": "java",
+            "name": "CodeGenerator",
+            "request": "launch",
+            "mainClass": "phase3.CodeGenerator",
+            "projectName": "SillyGeeseCS410_27522e92"
+        }
+    ]
+}
