@@ -874,8 +874,8 @@ public class CodeGenerator {
 
         int comp_int = Integer.parseInt(comp);
 
-        // opcodes for branch ops are 7 more than their equivalent atom representation
-        comp_int += 7;
+        // opcodes for branch ops are 6 more than their equivalent atom representation
+        comp_int += 6;
         String comp_hex = Integer.toHexString(comp_int);
 
         //lw rx leftAddress
