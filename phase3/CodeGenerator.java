@@ -715,10 +715,9 @@ public class CodeGenerator {
                 //DataSegment: <5, 0b000 5>
                 //then, fetch the number at that address
                 //do lw then sw like usual
-                //then delete that data segment (don't need it anymore)
 
 
-            //add the int to the data segment temporarily 
+            //add the int to the data segment 
             Number intAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc + 4;
 
@@ -749,15 +748,10 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction2);
             pc = pc+4;
 
-
-            //remove the int from the data segment + update dataSegmentPC
-            dataSegment.remove(left);
-            dataSegmentpc = dataSegmentpc-4;
-
         }
         else if(leftType.equals("Double"))
         {
-            //add the double as a temporary data segment
+            //add the double as a data segment
             Number doubleAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc +4;
 
@@ -786,11 +780,6 @@ public class CodeGenerator {
             String instruction2 = "e" + "a" + "00" + String.format("%4s", hexResultAddress).replace(' ','0');
             codeSegment.put(pc, instruction2);
             pc = pc+4;
-           
-
-            //remove the double from the data segment + update dataSegmentPC
-            dataSegment.remove(left);
-            dataSegmentpc = dataSegmentpc-4;
 
         }
         else 
