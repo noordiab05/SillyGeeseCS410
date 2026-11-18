@@ -627,9 +627,9 @@ public class CodeGenerator {
                 //DataSegment: <5, 0b000 5>
                 //then, fetch the number at that address
                 //do lw then sw like usual
+                //then delete that data segment (don't need it anymore)
 
-
-            //add the int to the data segment 
+            //add the int to the data segment temporarily
             Number intAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc + 4;
 
@@ -660,10 +660,14 @@ public class CodeGenerator {
             codeSegment.put(pc, instruction2);
             pc = pc+4;
 
+            //remove the int from the data segment + update dataSegmentPC
+            dataSegment.remove(left);
+            dataSegmentpc = dataSegmentpc-4;
+
         }
         else if(leftType.equals("Double"))
         {
-            //add the double as a data segment
+            //add the double as a temporary data segment
             Number doubleAddress = dataSegmentpc;
             dataSegmentpc = dataSegmentpc +4;
 
@@ -692,6 +696,10 @@ public class CodeGenerator {
             String instruction2 = "e" + "a" + "00" + String.format("%4s", hexResultAddress).replace(' ','0');
             codeSegment.put(pc, instruction2);
             pc = pc+4;
+
+            //remove the double from the data segment + update dataSegmentPC
+            dataSegment.remove(left);
+            dataSegmentpc = dataSegmentpc-4;
 
         }
         else 
@@ -764,6 +772,8 @@ public class CodeGenerator {
         String leftAddress = getAddress(left);
         String rightAddress = getAddress(right);
 
+        System.out.println(leftAddress + " " + rightAddress);
+
         if(leftAddress==null || rightAddress == null)
         {
             System.out.println("Issue with the addresses being null.\n");
@@ -821,7 +831,7 @@ public class CodeGenerator {
             // System.out.println(label);
             // the addr will need to be updated later
             if (label == -1) {
-                String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + String.format("%4s", dest).replace(' ','0'); //UMMMMM CHECK!!
+                String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest; //UMMMMM CHECK!!
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
                 return;
@@ -836,7 +846,7 @@ public class CodeGenerator {
         else
         {
             if (label == -1) {
-                String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" +String.format("%4s", dest).replace(' ','0'); //CHECK
+                String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest; //CHECK
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
                 return;
