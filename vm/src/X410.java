@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class X410 {
 	private static final int MEMORY_LIMIT = 0x10000;
-	private static final int CYCLE_LIMIT = 60;
+	private static final int CYCLE_LIMIT = 300;
 
 	private byte[] mem;
 	private ByteBuffer membuf;
