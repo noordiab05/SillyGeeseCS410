@@ -106,40 +106,6 @@ curly_brace_right
 end_of_line
 curly_brace_right
 end_of_line
-if_kwd
-parenthesis_left
-var_id i
-less_or_equal
-int_literal 10
-parenthesis_right
-curly_brace_left
-var_id weight
-assign_op
-var_id weight
-div_op
-double_literal 2.5
-end_of_line
-curly_brace_right
-end_of_line
-else_kwd
-curly_brace_left
-if_kwd
-parenthesis_left
-var_id i
-unequal
-int_literal 10
-parenthesis_right
-curly_brace_left
-var_id weight
-assign_op
-var_id weight
-sub_op
-double_literal 2.5
-end_of_line
-curly_brace_right
-end_of_line
-curly_brace_right
-end_of_line
 int_type
 var_id valid
 assign_op
