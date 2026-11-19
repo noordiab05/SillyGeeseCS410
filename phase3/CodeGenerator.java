@@ -23,7 +23,7 @@ public class CodeGenerator {
     //Ex:          'a'     0b000  5
     static LinkedHashMap<String, Number[]> dataSegment = new LinkedHashMap<>();
 
-    static LinkedHashMap<String, Integer> labels = new LinkedHashMap<>();
+    static LinkedHashMap<String, String> labels = new LinkedHashMap<>();
 
     //start data segment at address 400
     static final int DATA_SEGMENT_START = 0b110010000;
@@ -59,9 +59,7 @@ public class CodeGenerator {
         String first_instruction = "00000004";
         codeSegment.put(0b000, first_instruction);
         pc = pc+4;
-        //turns 1 if add/sub/mult/div occurs
-        //cleared at MOV
-        int arithmetic_operation_identifier = 0;
+
         for (var line : lines) {
             String[] pieces = line.substring(1, line.length() - 1).split(",");
             String operation = pieces[0];
@@ -75,18 +73,7 @@ public class CodeGenerator {
             {
                 place1 = pieces[1];
                 place2 = pieces[3];
-                
-                //skip MOV after an ADD/SUB/MULT/DIV
-                if(arithmetic_operation_identifier == 1)
-                {
-                    //clear for the future
-                    arithmetic_operation_identifier = 0;
-                    continue;
-                }
-                else
-                {
-                    mov(place1, place2);
-                }
+                mov(place1, place2);
             }
             else if(operation.equals("LBL"))
             {
@@ -103,7 +90,6 @@ public class CodeGenerator {
                 place1 = pieces[1];
                 place2 = pieces[2];
                 place3 = pieces[3];
-                arithmetic_operation_identifier = 1;
                 add(place1, place2, place3);
             }
             else if(operation.equals("SUB"))
@@ -111,7 +97,6 @@ public class CodeGenerator {
                 place1 = pieces[1];
                 place2 = pieces[2];
                 place3 = pieces[3];
-                arithmetic_operation_identifier = 1;
                 sub(place1, place2, place3);
             }
             else if(operation.equals("MUL"))
@@ -119,7 +104,6 @@ public class CodeGenerator {
                 place1 = pieces[1];
                 place2 = pieces[2];
                 place3 = pieces[3];
-                arithmetic_operation_identifier = 1;
                 mul(place1, place2, place3);
             }
             else if(operation.equals("DIV"))
@@ -127,7 +111,6 @@ public class CodeGenerator {
                 place1 = pieces[1];
                 place2 = pieces[2];
                 place3 = pieces[3];
-                arithmetic_operation_identifier = 1;
                 div(place1, place2, place3);
             }
             else if(operation.equals("TST"))
@@ -145,7 +128,8 @@ public class CodeGenerator {
         for (var instruction_addr : codeSegment.keySet()) {
             if (codeSegment.get(instruction_addr).startsWith("jmp-redo")) {
                 String dest = codeSegment.get(instruction_addr).substring(8);
-                int label = labels.get(dest);
+                String label = labels.get(dest);
+                System.out.println("i_addr: " + instruction_addr + " -- jmp label: " + label);
 
                 // bal addr
                 String instruction = "6" + "000" + String.format("%4s", label).replace(' ','0');
@@ -156,7 +140,8 @@ public class CodeGenerator {
                 
                 String almost_instruction = codeSegment.get(instruction_addr).substring(8);
                 String dest = almost_instruction.substring(4);
-                int label = labels.get(dest);
+                String label = labels.get(dest);
+                System.out.println("i_addr: " + instruction_addr + " -- tst label: " + label);
                 // branch addr
                 String instruction = almost_instruction.substring(0, 4) + String.format("%4s", label).replace(' ','0');
                 codeSegment.put(instruction_addr, instruction);
@@ -278,7 +263,7 @@ public class CodeGenerator {
         }
         else
         {
-            String instruction = "d" + "a" + "00"+ String.format("%4s", rightAddress).replace(' ','0');
+            String instruction = "d" + "b" + "00"+ String.format("%4s", rightAddress).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;        
         }
@@ -521,7 +506,7 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg2 leftAddress
-            String instruction = "c" + "2" + "00" + String.format("%4s", leftAddress).replace(' ','0');
+            String instruction = "d" + "2" + "00" + String.format("%4s", leftAddress).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -529,7 +514,7 @@ public class CodeGenerator {
         else
         {
            //lw frep2 leftAddress
-            String instruction = "c" + "a" + "00"+ String.format("%4s", leftAddress).replace(' ','0');
+            String instruction = "d" + "a" + "00"+ String.format("%4s", leftAddress).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -539,7 +524,7 @@ public class CodeGenerator {
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
         {
             //lw ireg3 rightAddress
-            String instruction = "c" + "3" + "00" + String.format("%4s", rightAddress).replace(' ','0');
+            String instruction = "d" + "3" + "00" + String.format("%4s", rightAddress).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -547,7 +532,7 @@ public class CodeGenerator {
         else
         {
             //lw frep3 rightAddress
-            String instruction = "c" + "b" + "00"+ String.format("%4s", rightAddress).replace(' ','0');
+            String instruction = "d" + "b" + "00"+ String.format("%4s", rightAddress).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -628,12 +613,8 @@ public class CodeGenerator {
                 //DataSegment: <5, 0b000 5>
                 //then, fetch the number at that address
                 //do lw then sw like usual
-                //then delete that data segment (don't need it anymore)
 
-            //add the int to the data segment temporarily
-            Number intAddress = dataSegmentpc;
-            dataSegmentpc = dataSegmentpc + 4;
-
+            Number intAddress;
 
             //basic initialization
             Number [] intElements = new Number[2];
@@ -641,6 +622,10 @@ public class CodeGenerator {
             intElements[1] = 0;
             if(dataSegment.get(left) == null)
             {
+                //add the int to the data segment
+                intAddress = dataSegmentpc;
+                dataSegmentpc = dataSegmentpc + 4;
+
                 intElements[0] = intAddress;
                 intElements[1] = Integer.parseInt(left);
                 dataSegment.put(left, intElements);
@@ -648,11 +633,11 @@ public class CodeGenerator {
             }
             else
             {
+                // the int is already in the data segment
                 intElements[0] = dataSegment.get(left)[0];
+                intAddress = intElements[0];
                 intElements[1] = dataSegment.get(left)[1];
             }
-
-            
 
             //get result info:
             Number resultElements[] = dataSegment.get(result);
@@ -686,9 +671,8 @@ public class CodeGenerator {
         }
         else if(leftType.equals("Double"))
         {
-            //add the double as a temporary data segment
-            Number doubleAddress = dataSegmentpc;
-            dataSegmentpc = dataSegmentpc +4;
+
+            Number doubleAddress;
 
             //basic initialization
             Number [] doubleElements = new Number[2];
@@ -696,6 +680,10 @@ public class CodeGenerator {
             doubleElements[1] = 0;
             if(dataSegment.get(left) == null)
             {
+                //add the double to the a data segment
+                doubleAddress = dataSegmentpc;
+                dataSegmentpc = dataSegmentpc + 4;
+
                 doubleElements[0] = doubleAddress;
                 doubleElements[1] = Double.parseDouble(left);
                 dataSegment.put(left, doubleElements);
@@ -703,14 +691,13 @@ public class CodeGenerator {
             }
             else
             {
+                // the double is already in the data segment
                 doubleElements[0] = dataSegment.get(left)[0];
+                doubleAddress = doubleElements[0];
                 doubleElements[1] = dataSegment.get(left)[1];
             }
 
-
-           
-
-             //get result info:
+            //get result info:
             Number resultElements[] = dataSegment.get(result);
             Number resultAddress = resultElements[0];
             resultElements[1] = doubleElements[1];
@@ -792,7 +779,8 @@ public class CodeGenerator {
     static void lbl(String dest)
     {
         // save this instruction's address for later
-        labels.put(dest, pc);
+        labels.put(dest, Integer.toHexString(pc));
+        System.out.println("lbl: " + dest + " -- pc: " + pc + " 0x" + (Integer.toHexString(pc)));
 
         // nop (all 0's)
         String instruction = "00000000";
@@ -857,7 +845,7 @@ public class CodeGenerator {
             pc = pc+4;
         }
 
-        int label = labels.getOrDefault(dest, -1);
+        String label = labels.get(dest);
 
         // branch rx ry addr
         if((leftElements[1] instanceof Integer) && (rightElements[1] instanceof Integer))
@@ -865,30 +853,30 @@ public class CodeGenerator {
             // System.out.println(comp_hex);
             // System.out.println(label);
             // the addr will need to be updated later
-            if (label == -1) {
-                String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest; //UMMMMM CHECK!!
+            if (label == null) {
+                String instruction = "tst-redo" + comp_hex + "0" + "2" + "3" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
                 return;
             }
 
             // branch ireg2 ireg3 label
-            String instruction = comp_hex +"0"+"2"+"3"+String.format("%4s", label).replace(' ','0'); //CHECK!!!
+            String instruction = comp_hex +"0"+"2"+"3"+String.format("%4s", label).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
         
         else
         {
-            if (label == -1) {
-                String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest; //CHECK
+            if (label == null) {
+                String instruction = "tst-redo" + comp_hex + "0" + "a" + "b" + dest;
                 codeSegment.put(pc, instruction);
                 pc = pc+4;
                 return;
             }
 
             // branch fpreg2 frepg3 label
-            String instruction = comp_hex + "0" + "a" + "b" + String.format("%4s", label).replace(' ','0'); //CHECK
+            String instruction = comp_hex + "0" + "a" + "b" + String.format("%4s", label).replace(' ','0');
             codeSegment.put(pc, instruction);
             pc = pc+4;
         }
@@ -898,10 +886,10 @@ public class CodeGenerator {
 
     static void jmp(String dest)
     {
-        int label = labels.getOrDefault(dest, -1);
+        String label = labels.get(dest);
 
         // the addr will need to be updated later
-        if (label == -1) {
+        if (label == null) {
             String instruction = "jmp-redo" + String.format("%4s", dest).replace(' ','0'); //CHECK
             codeSegment.put(pc, instruction);
             pc = pc+4;
